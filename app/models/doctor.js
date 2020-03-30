@@ -19,6 +19,11 @@ const doctorSchema = new Schema(
             required: true
         },
 
+        fee: {
+            type: Number,
+            required: true
+        },
+
         documents: {
             type: [String]
         },
