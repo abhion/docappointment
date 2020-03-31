@@ -12,4 +12,6 @@ router.post('/specialization', specializationController.createSpecialization);
 
 router.get('/doctors', doctorController.getDoctors);
 
+router.post('/search', doctorController.searchDoctors)
+
 module.exports = router;

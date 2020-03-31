@@ -14,10 +14,13 @@ module.exports.createUser = (req, res) => {
                     newDoctor.userId = user.id;
                     newDoctor.save()
                         .then(doctor => {
-                            res.json({user, doctor})
+                            res.json({...user, ...doctor})
                         })
                 }
-                res.json(user);
+                else{
+
+                    res.json(user);
+                }
             })
             .catch(err => res.json(err));
 }
