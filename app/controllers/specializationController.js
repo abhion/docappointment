@@ -7,6 +7,12 @@ module.exports = {
         newSpecialization.save()
             .then(specialization => res.json(specialization))
             .catch(err => res.json(err))
+    },
+
+    listSpecializations: (req, res) => {
+        Specialization.find()
+            .then(specializations => res.json(specializations))
+            .catch(err => res.json(err))
     }
 
 }

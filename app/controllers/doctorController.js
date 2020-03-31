@@ -8,8 +8,7 @@ module.exports.getDoctors = (req, res) => {
 }
 
 module.exports.searchDoctors = (req, res) => {
-    const { specialization,  location, searchTerm } = req.body;
-    console.log(req.body);
+    const { specialization = null,  location = null } = req.body;
     Doctor.find(
         {
           location: {
@@ -17,10 +16,17 @@ module.exports.searchDoctors = (req, res) => {
                 $geometry: location,
                 $maxDistance: 10000
              }
-          }
-        }
+          },
+          specialization
+        },
+
      )
      .then(doctors => {
          res.json(doctors);
      })
+     .catch(err => res.json(err));
+}
+
+module.exports.updateDoctor = (req, res) => {
+    const { id, verify } = req.params;
 }

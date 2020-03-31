@@ -25,6 +25,32 @@ module.exports.createUser = (req, res) => {
             .catch(err => res.json(err));
 }
 
+module.exports.login = (req, res) => {
+    const { email, password } = req.body;
+    User.findOne({ email })
+        .then(user => {
+            if(!user){
+                res.json("Invalid email/password");
+            }
+           else{
+            user.verifyCredentials(password)
+                .then(result => {
+                    if(result){
+                        user.generateToken()
+                            .then(token => {
+                                res.setHeader('x-auth', token).send({})
+                            })
+                            .catch(err => res.json(err));
+                    }
+                    else{
+                        res.json("Invalid email/password");
+                    }
+                })
+            ;
+           }
+        })
+}
+
 module.exports.listUsers = (req, res) => {
     User.find()
         .then(users => res.json(users))
