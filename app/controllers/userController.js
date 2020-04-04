@@ -5,8 +5,6 @@ const Doctor = require('../models/doctor');
 module.exports.createUser = (req, res) => {
         
         const { doctor = null, ...user } = req.body;
-        console.log(doctor, "THE DOCTOR");
-        console.log(user, "THE USER");
         const userObj = new User(user);
         userObj.save()
             .then(user => {

@@ -9,14 +9,18 @@ const reviewsController = require('../app/controllers/reviewsController');
 
 const authenticate = require('../app/middlewares/authenticate');
 const multer = require('multer');
-const mkdirp = require('mkdirp');
+const makeDir = require('make-dir');
 
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        const made = mkdirp('./userfiles/rama')
-        console.log("===========", made, "MADs =============");
-        cb(null, made);
+        makeDir('./userfiles/rama@gmail.com')
+            .then(made => {
+                console.log(" ======== ", made, " ======== ");
+                cb(null, made);
+
+            })
+            .catch(err => console.log(err))
      },
     filename: function (req, file, cb) {
         cb(null , file.originalname);
