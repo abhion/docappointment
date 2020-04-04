@@ -77,7 +77,7 @@ userSchema.methods.generateToken = function () {
     }
     const token = signJwt(tokenData, fs.readFileSync(path.resolve(__dirname, '../security/private.pem'), 'utf-8'));
     if (token) {
-        user.tokens.push({token});
+        user.tokens.push({ token });
         return user.save()
             .then(savedUser => {
                 return Promise.resolve(token);
@@ -85,7 +85,7 @@ userSchema.methods.generateToken = function () {
 
 
     } else {
-        return Promise.reject();
+        return Promise.reject('Error generating token');
     }
 
 
@@ -93,21 +93,28 @@ userSchema.methods.generateToken = function () {
 
 userSchema.methods.verifyCredentials = function (password) {
     const user = this;
-
+    console.log("WTF", bcryptjs.compare(password, user.password).then(result => console.log(result)))
     return bcryptjs.compare(password, user.password)
+        .then(result => Promise.resolve(result))
 
 }
 
 userSchema.pre('save', function (next) {
     const user = this;
-    bcryptjs.genSalt(10)
-        .then(salt => {
-            bcryptjs.hash(this.password, salt)
-                .then(hashedPass => {
-                    user.password = hashedPass;
-                    next();
-                })
-        })
+    if (user.isNew) {
+        bcryptjs.genSalt(10)
+            .then(salt => {
+                bcryptjs.hash(this.password, salt)
+                    .then(hashedPass => {
+                        user.password = hashedPass;
+                        next();
+                    })
+            })
+
+    }
+    else{
+        next();
+    }
 
 })
 

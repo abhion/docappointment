@@ -50,7 +50,8 @@ const doctorSchema = new Schema(
         },
 
         isVerified: {
-            type: Boolean
+            type: Boolean,
+            default: false
         },
 
         appointmentDuration: {
@@ -66,7 +67,11 @@ const doctorSchema = new Schema(
                     type: Number,
                     required: true
                 },
-                doctorId: Schema.Types.ObjectId,
+                description: {
+                    type: String,
+                    required: true
+                },
+
                 Date: {
                     type: Date,
                     default: Date.now()
@@ -88,6 +93,7 @@ const doctorSchema = new Schema(
 });
 
 doctorSchema.index({ location: '2dsphere' });
+
 
 const doctor = mongoose.model('doctor', doctorSchema);
 

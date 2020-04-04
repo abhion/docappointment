@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Doctor = require('../models/doctor');
 
+
 module.exports.createUser = (req, res) => {
         
         const { doctor = null, ...user } = req.body;
@@ -30,7 +31,7 @@ module.exports.login = (req, res) => {
     User.findOne({ email })
         .then(user => {
             if(!user){
-                res.json("Invalid email/password");
+                res.json("No user with that email");
             }
            else{
             user.verifyCredentials(password)
@@ -43,12 +44,21 @@ module.exports.login = (req, res) => {
                             .catch(err => res.json(err));
                     }
                     else{
-                        res.json("Invalid email/password");
+                        res.json("Invalid password");
                     }
                 })
             ;
            }
         })
+}
+
+module.exports.logout = (req, res) => {
+    const user = req.user;
+    User.findOneAndUpdate( user._id, { $pull: { tokens: {token : req.header('x-auth')} } }, {new: true} )
+        .then(user => {
+            res.json(user)
+        })
+        .catch(err => res.json(err));
 }
 
 module.exports.listUsers = (req, res) => {
