@@ -46,14 +46,15 @@ router.put('/doctor/:id/:verify', authenticate.authenticateUser, authenticate.is
 router.delete('/doctor/:id', authenticate.authenticateUser, authenticate.isAdmin, doctorController.deleteDoctor);
 
 router.post('/appointment', authenticate.authenticateUser, authenticate.isPatient, appointmentController.bookAppointment);
-router.get('/appointments', authenticate.authenticateUser, appointmentController.getAppointments);
+router.get('/appointments/:userId', authenticate.authenticateUser, appointmentController.getAppointments);
 router.get('/appointment/:id', authenticate.authenticateUser, appointmentController.getAppointmentById);
 router.put('/appointment/:id/:cancel', authenticate.authenticateUser, appointmentController.cancelAppointment);
+router.delete('/appointments', appointmentController.deleteAllAppointments);
 
 
 router.post('/review', reviewsController.addReview);
 router.put('/review/:doctorUserId', reviewsController.updateReview);
-router.get('/review/:doctorUserId', reviewsController.getDoctorReviews);
+router.get('/reviews/:doctorUserId', reviewsController.getDoctorReviews);
 
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const Doctor = require('../models/doctor');
 
 module.exports.addReview = (req, res) => {
-    const { userId, patientId = null, rating = null, description = null } = req.body;
-    Doctor.findOne(userId)
+    const { doctorUserId, patientId = null, rating = null, description = null } = req.body;
+    Doctor.findOne({userId: doctorUserId})
         .then(doctor => {
             if (doctor) {
                 doctor.reviews.push({ patientId, rating, description })
@@ -21,7 +21,7 @@ module.exports.updateReview = (req, res) => {
     const { patientId = null, rating = null, description = null } = req.body;
     Doctor.updateOne(
         { userId: doctorUserId, "reviews.patientId": patientId },
-        {$set: {reviews: { patientId, rating, description }}}
+        {$set: {"reviews.$": { patientId, rating, description }}}
     )
     .then(doctor => res.json(doctor.reviews))
     .catch(err => res.json(err));
@@ -30,6 +30,6 @@ module.exports.updateReview = (req, res) => {
 module.exports.getDoctorReviews = (req, res) => {
     const { doctorUserId } = req.params;
     Doctor.findOne({userId: doctorUserId}, { reviews: 1 })
-        .then(reviews => reviews.length ? res.json(reviews) : res.json([]))
+        .then(reviews => res.json(reviews))
         .catch(err => res.json(err))
 }
