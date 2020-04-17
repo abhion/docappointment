@@ -5,43 +5,49 @@ const specializationController = require('../app/controllers/specializationContr
 const doctorController = require('../app/controllers/doctorController');
 const appointmentController = require('../app/controllers/appointmentController');
 const reviewsController = require('../app/controllers/reviewsController');
+// const express = require('express');
 
 
 const authenticate = require('../app/middlewares/authenticate');
 const multer = require('multer');
 const makeDir = require('make-dir');
 
+const serveStaticFiles = (req, res, next) => {
+    express.static(__dirname + `/userfiles/${req.user.email}`);
+    next();
+}
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        makeDir('./userfiles/rama@gmail.com')
+    destination: function (req, file, cb) {
+
+        makeDir(`./userfiles/${req.body.email}/`)
             .then(made => {
-                console.log(" ======== ", made, " ======== ");
                 cb(null, made);
 
             })
             .catch(err => console.log(err))
-     },
+    },
     filename: function (req, file, cb) {
-        cb(null , file.originalname);
+        cb(null, file.originalname);
     }
 })
 
-const upload = multer({storage});
+const upload = multer({ storage });
 
-router.post('/user', upload.fields([{name: 'profilePic', maxCount: 1}, {name: 'docs', maxCount: 3}]), userController.createUser);
+router.post('/user', upload.fields([{ name: 'profilePic', maxCount: 1 }, { name: 'docs', maxCount: 3 }]), userController.createUser);
 router.get('/users', userController.listUsers);
+router.get('/user/current', authenticate.authenticateUser, userController.getLoggedInUser);
 router.delete('/users', userController.clearData);
 router.post('/login', userController.login);
-router.delete('/logout', userController.logout);
+router.delete('/logout', authenticate.authenticateUser, userController.logout);
 
 router.post('/specialization', specializationController.createSpecialization);
 router.get('/specializations', specializationController.listSpecializations);
 
-
-router.get('/doctors',  doctorController.getDoctors);
-router.post('/search',  doctorController.searchDoctors);
-router.put('/doctor/:id',  doctorController.updateDoctor);
+router.get('/doctors', doctorController.getDoctors);
+router.get('/doctors/pending', authenticate.authenticateUser, authenticate.isAdmin, doctorController.getPendingStatusDoctors);
+router.post('/search', doctorController.searchDoctors);
+router.put('/doctor/:id', doctorController.updateDoctor);
 router.put('/doctor/:id/:verify', authenticate.authenticateUser, authenticate.isAdmin, doctorController.verifyDoctor);
 router.delete('/doctor/:id', authenticate.authenticateUser, authenticate.isAdmin, doctorController.deleteDoctor);
 

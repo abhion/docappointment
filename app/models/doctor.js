@@ -49,9 +49,9 @@ const doctorSchema = new Schema(
             }
         },
 
-        isVerified: {
-            type: Boolean,
-            default: false
+        verificationStatus: {
+            type: String,
+            default: 'Pending'
         },
 
         appointmentDuration: {
@@ -93,6 +93,20 @@ const doctorSchema = new Schema(
 });
 
 doctorSchema.index({ location: '2dsphere' });
+
+doctorSchema.statics.isDoctorVerified = function(userId){
+    const Doctor = this;
+    return Doctor.findOne({userId}, {verificationStatus: 1})
+        .then(status => {
+            console.log(status, "DOCSTATUS");
+            
+            if(status.verificationStatus === 'Verified'){
+                return Promise.resolve(true);
+            }
+            return Promise.reject(false);
+        })
+        .catch(err => Promise.reject(err))
+}
 
 
 const doctor = mongoose.model('doctor', doctorSchema);

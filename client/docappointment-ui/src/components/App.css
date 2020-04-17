@@ -1,0 +1,102 @@
+#root{
+  height: 100vh;
+}
+.App{
+  height: 100%;
+}
+.ant-layout{
+  height: 100% !important;
+}
+.logo-container{
+  float: left;
+  display: flex;
+  color: white;
+  width: 150px;
+}
+.logo{
+  font-size: 25px;
+}
+.logo-container h4{
+  color: white;
+  margin-left: 10px;
+}
+.ant-menu-root{
+  float: right;
+}
+.landing-container{
+  background-image: url('../images/doctorlanding.jpg');
+  height: 100%;
+}
+
+.ant-layout-content{
+  padding: 0px;
+}
+.site-layout-background{
+  height: 100% !important;
+  padding: 0px !important;
+}
+.table-action-text{
+  color: rgb(28, 199, 241);
+  cursor: pointer;
+}
+
+.content-container{
+  height: 100%;
+  border: 1px solid;
+  /* padding: 20px; */
+}
+.site-layout{
+  background-color: rgba(134, 197, 206, 0.5) !important;
+}
+.patient-search-box{
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+.search-box-container{
+  width: 60%;
+  margin: auto;
+  background: rgb(20, 177, 212, 0.8);
+    padding: 2px;
+    border-radius: 3px;
+}
+.search-box-container .ant-input-group-wrapper{
+  height: 39px;
+}
+.search-box-container  .ant-input-group{
+  height: 100%;
+}
+.search-box-container .ant-input{
+  height: 100%;
+}
+.ant-input-group-addon{
+  background-color: #f1efef !important;
+}
+.search-box-container .ant-select-selection-placeholder{
+  color: black !important;
+  font-weight: 500;
+}
+.header-image{
+  width: 32px;
+  border-radius: 50%;
+  margin-left: 10px;
+  border: 2px solid #37bff3;
+}
+.searchAddonBtn{
+  cursor: pointer;
+  outline: solid 1px #062f56;
+  margin-right: 10px;
+  padding: 10px 8px;
+  background-color: #062f56;
+  color: white;
+  position: relative;
+  right: -22px;
+}
+.suggestion-item{
+  outline: 1px solid #e4e4e4 !important;
+  padding: 10px 3px;
+}
+.suggestion-item--active{
+  padding: 3px;
+  background-color: cornflowerblue !important;
+}

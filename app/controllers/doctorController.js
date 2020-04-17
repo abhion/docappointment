@@ -8,6 +8,15 @@ module.exports.getDoctors = (req, res) => {
         .catch(err => res.json(err))
 }
 
+module.exports.getPendingStatusDoctors = (req, res) => {
+    Doctor.find({ verificationStatus: 'Pending' })
+        .populate('specialization', 'name')
+        .populate('userId', 'name _id photo')
+        .then(doctors => doctors ? res.json(doctors) : res.json([]))
+        .catch(err => res.json(err));
+
+}
+
 module.exports.searchDoctors = (req, res) => {
     const { specialization = null, location = null } = req.body;
     Doctor.find(
@@ -29,16 +38,17 @@ module.exports.searchDoctors = (req, res) => {
 }
 
 module.exports.updateDoctor = (req, res) => {
-    const {id} = req.params;
-    Doctor.findByIdAndUpdate(id, req.body, {new: true})
+    const { id } = req.params;
+    Doctor.findByIdAndUpdate(id, req.body, { new: true })
         .then(doctor => res.json(doctor))
         .catch(err => res.json(err))
 }
 
 module.exports.verifyDoctor = (req, res) => {
     const { id } = req.params;
-    Doctor.findOneAndUpdate({userId: id}, req.body, {new: true})
-        .then(doctor => res.json(doctor))
+    const { verificationStatus = 'Pending' } = req.body;
+    Doctor.findOneAndUpdate({ userId: id }, {verificationStatus}, { new: true })
+        .then(doctor => doctor ? res.json({ message: 'Status Updated', doctor }) : res.json({ errMessage: 'No doctor found' }))
         .catch(err => res.json(err))
 }
 

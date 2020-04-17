@@ -95,7 +95,7 @@ userSchema.methods.verifyCredentials = function (password) {
     const user = this;
     return bcryptjs.compare(password, user.password)
         .then(result => Promise.resolve(result))
-
+        .catch(err => console.log(err))
 }
 
 userSchema.pre('save', function (next) {
