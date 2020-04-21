@@ -16,6 +16,7 @@ export const setLoggedInStatusReducer = (status = false, action) => {
 
         case 'LOGGEDIN_FALSE':
             localStorage.removeItem('authToken');
+            localStorage.removeItem('current_path');
             return false;
     
         default:

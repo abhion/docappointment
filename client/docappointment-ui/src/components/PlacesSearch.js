@@ -10,16 +10,15 @@ export default class LocationSearchInput extends React.Component {
     }
 
     handleAddressChange = (address) => {
-        console.log(address);
-        this.setState({address})
+        this.setState({address}, () => {this.props.onAddressSelect(address)})
     }
 
     onAddressSelect = (value) => {
         
         this.setState({
             address: value
-        })
-        this.props.onAddressSelect(value)
+        }, () => {this.props.onAddressSelect(value)})
+        
     }
 
 
@@ -49,7 +48,7 @@ export default class LocationSearchInput extends React.Component {
                 {suggestions.map((suggestion) => {
                   const className = suggestion.active ? "suggestion-item--active" : "suggestion-item";
                   const style = suggestion.active
-                    ? { backgroundColor: "#fafafa", cursor: "pointer", padding: 25 }
+                    ? { backgroundColor: "#fafafa", cursor: "pointer", padding: '10px 3px', color: 'white', transition: 'all 280ms' }
                     : { backgroundColor: "#ffffff", cursor: "pointer" };
   
                   const spread = {

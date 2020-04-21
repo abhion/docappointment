@@ -10,7 +10,7 @@ const store = configureStore();
 
 store.dispatch(startGetSpecializations());
 
-store.subscribe(_=>console.log(store.getState(), "SUBSC"))
+// store.subscribe(_=>console.log(store.getState(), "SUBSC"))
 
 ReactDOM.render(
   <BrowserRouter>

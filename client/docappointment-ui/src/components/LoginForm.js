@@ -14,18 +14,29 @@ class LoginForm extends React.Component {
 
     onFinish = (loginData) => {
         console.log(loginData);
+        this.setState({btnLoading: true})
         axios.post('http://localhost:3038/login', loginData)
             .then(response => {
                 if(response.data.message){
+                    this.setState({btnLoading: false})
                     this.props.closeDrawer();
                     localStorage.setItem('authToken', response.headers['x-auth']);
                     this.props.dispatch(setLoggedInTrue());
                     this.props.dispatch(setLoggedInUser(response.data.user));
-
+                    if(response.data.user.role === 'Doctor'){
+                        this.props.history.push('/doctors')
+                    }
+                    else if(response.data.user.role === 'Patient'){
+                        this.props.history.push('/patient/search')
+                    }
+                    else if(response.data.user.role === 'Admin'){
+                        this.props.history.push('/admin/doctors/verify');
+                    }
                     // response.headers
                 }
                 else if(response.data.errMessage){
                     message.error(response.data.errMessage);
+                    this.setState({btnLoading: false})
                 }
             })
     }

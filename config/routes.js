@@ -46,13 +46,15 @@ router.get('/specializations', specializationController.listSpecializations);
 
 router.get('/doctors', doctorController.getDoctors);
 router.get('/doctors/pending', authenticate.authenticateUser, authenticate.isAdmin, doctorController.getPendingStatusDoctors);
-router.post('/search', doctorController.searchDoctors);
+router.post('/search/locality', doctorController.searchDoctorsInLocality);
+router.post('/search/sublocality', doctorController.searchDoctorsInSubLocality);
 router.put('/doctor/:id', doctorController.updateDoctor);
 router.put('/doctor/:id/:verify', authenticate.authenticateUser, authenticate.isAdmin, doctorController.verifyDoctor);
 router.delete('/doctor/:id', authenticate.authenticateUser, authenticate.isAdmin, doctorController.deleteDoctor);
 
 router.post('/appointment', authenticate.authenticateUser, authenticate.isPatient, appointmentController.bookAppointment);
 router.get('/appointments/:userId', authenticate.authenticateUser, appointmentController.getAppointments);
+router.get('/appointments/available/:doctorUserId', authenticate.authenticateUser, appointmentController.getUpcomingAppointments);
 router.get('/appointment/:id', authenticate.authenticateUser, appointmentController.getAppointmentById);
 router.put('/appointment/:id/:cancel', authenticate.authenticateUser, appointmentController.cancelAppointment);
 router.delete('/appointments', appointmentController.deleteAllAppointments);

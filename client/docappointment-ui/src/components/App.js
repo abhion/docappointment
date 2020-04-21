@@ -3,7 +3,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 import { Layout, Menu, Drawer, Dropdown } from 'antd';
 import Landing from './Landing';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setLoggedInFalse, setLoggedInTrue, startGetLoggedInUser, setLoggedInUser } from '../actions/usersAction';
 import LoginForm from './LoginForm';
@@ -53,6 +53,10 @@ class App extends React.Component {
       if(location.pathname !== '/' && !localStorage.getItem('authToken')){
         this.props.history.push('/');
       }
+      if(this.props.history.location.pathname !== '/'){
+
+        localStorage.setItem('current_path', this.props.history.location.pathname || '');
+      }
     })
 
   }
@@ -79,7 +83,7 @@ class App extends React.Component {
       })
       .catch(err => {
         console.log(err.response)
-        if (err.response && err.response.status == 401) {
+        if (err.response && err.response.status === 401) {
           this.props.dispatch(setLoggedInFalse());
         }
       })
@@ -89,7 +93,7 @@ class App extends React.Component {
   render() {
     const user = this.props.user || {};
     const userIconPath =
-      user.photo ? `http://localhost:3038/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : '');
+      user.photo ? `http://localhost:3038/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : userIcon);
 
     const dropdownMenu = (
       <Menu>
@@ -104,10 +108,10 @@ class App extends React.Component {
             <Dropdown overlay={dropdownMenu}>
               <div style={{ display: 'flex' }}>
               <div>
-                  {this.props.user.name}
+                  {this.props.user.role === 'Doctor' ? 'Dr. ' : '' }{ this.props.user.name}
                 </div>
                 <div>
-                  <img src={userIconPath} className="header-image" />
+                  <img src={userIconPath} className="header-image" alt="header-img" />
                 </div>
                
               </div>
@@ -130,15 +134,15 @@ class App extends React.Component {
         if(this.props.user.role === 'Doctor')
         {
           content = <Route path="/doctor" component={DoctorContainer} />
-          redirecTo = <Redirect to="/doctor" />
+          // redirecTo = <Redirect to="/doctor" />
         }
         else if(this.props.user.role === 'Patient'){
           content = <Route path="/patient" component={PatientContainer} />
-          redirecTo = <Redirect to="/patient/search" />
+          // redirecTo = <Redirect to="/patient/search" />
         }
         else if(this.props.user.role === 'Admin'){
           content = (<Route path="/admin" component={AdminContainer} />)
-          redirecTo = <Redirect to="/admin/doctors/verify" />
+          // redirecTo = <Redirect to="/admin/doctors/verify" />
          
         }
       }

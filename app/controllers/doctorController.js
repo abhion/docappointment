@@ -3,7 +3,7 @@ const Doctor = require('../models/doctor');
 const Appointment = require('../models/appointment');
 
 module.exports.getDoctors = (req, res) => {
-    Doctor.find()
+    Doctor.find().populate('userId').populate('specialization')
         .then(doctors => res.json(doctors))
         .catch(err => res.json(err))
 }
@@ -17,25 +17,46 @@ module.exports.getPendingStatusDoctors = (req, res) => {
 
 }
 
-module.exports.searchDoctors = (req, res) => {
+module.exports.searchDoctorsInSubLocality = (req, res) => {
     const { specialization = null, location = null } = req.body;
+    console.log(location);
     Doctor.find(
         {
             location: {
                 $nearSphere: {
                     $geometry: location,
-                    $maxDistance: 10000
+                    $maxDistance: 4000
                 }
             },
             specialization
         },
 
-    )
+    ).populate('userId')
         .then(doctors => {
             res.json(doctors);
         })
         .catch(err => res.json(err));
 }
+module.exports.searchDoctorsInLocality = (req, res) => {
+    const { specialization = null, location = null } = req.body;
+    console.log(location);
+    Doctor.find(
+        {
+            location: {
+                $geoWithin: {
+                    $polygon: location.coordinates
+                }
+            },
+            specialization
+        },
+
+    ).populate('userId')
+        .then(doctors => {
+            res.json(doctors);
+        })
+        .catch(err => res.json(err));
+}
+
 
 module.exports.updateDoctor = (req, res) => {
     const { id } = req.params;

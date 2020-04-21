@@ -5,7 +5,7 @@ module.exports = {
     createSpecialization: (req, res) => {
         const newSpecialization = new Specialization(req.body);
         newSpecialization.save()
-            .then(specialization => res.json(specialization))
+            .then(specialization => res.json({message: 'Added new speciality'}))
             .catch(err => res.json(err))
     },
 

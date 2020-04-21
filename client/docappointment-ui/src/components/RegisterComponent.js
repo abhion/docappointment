@@ -71,7 +71,7 @@ class RegisterComponent extends React.Component {
                 const locationResult = results[0].geometry.location;
                 const location = {
                     type: 'Point',
-                    coordinates: [locationResult.lat(), locationResult.lng()]
+                    coordinates: [locationResult.lng(), locationResult.lat()]
                 }
                this.setState({
                 location,
@@ -87,7 +87,7 @@ class RegisterComponent extends React.Component {
         console.log(values);
         console.log(this.state.fileList);
 
-        if(!this.state.practisingAt){
+        if(values.role ==='Doctor' && !this.state.practisingAt){
             message.warn('Please enter hospital name.');
             return;
         }
@@ -111,7 +111,7 @@ class RegisterComponent extends React.Component {
 
         if (this.state.usertype === 'Doctor') {
             const {
-                fee, specialization, practisingAt,
+                fee, specialization,
                 daysAvailable,
                 appointmentDuration,
                 schoolOfMedicine } = values;
@@ -119,9 +119,10 @@ class RegisterComponent extends React.Component {
             const practiseStartDate = values.practiseStartDate.toISOString();
 
             const fromTo = {
-                from: values.fromTo[0].format('HH:MM'),
-                to: values.fromTo[1].format('HH:MM')
+                from: values.fromTo[0].format('HH:mm'),
+                to: values.fromTo[1].format('HH:mm')
             }
+            
 
             formData.append('fee', fee);
             formData.append('specialization', specialization);
@@ -152,9 +153,11 @@ class RegisterComponent extends React.Component {
                 if (response.data.message) {
                     message.success(response.data.message);
                     this.props.closeDrawer();
-                    this.props.openLoginDrawer();
+                    if(this.state.usertype !== 'Doctor'){
+                        this.props.openLoginDrawer();
+                    }
                     this.registerFormRef.current.resetFields();
-                    this.setState({ fileList: [], docFileList: [], btnLoading: false })
+                    this.setState({ fileList: [], docFileList: [], btnLoading: false, usertype: 'Patient' })
                 } else {
                     this.setState({ btnLoading: false })
                     message.error(response.data.errmsg);
@@ -406,7 +409,7 @@ class RegisterComponent extends React.Component {
                     </Row>
                     <Row >
                         <Form.Item >
-                            <Button type="primary" loading={this.state.btnLoading} loading={this.state.btnLoading} htmlType="submit">
+                            <Button type="primary" loading={this.state.btnLoading} htmlType="submit">
                                 {this.state.usertype === 'Patient' ? 'Create Account' : 'Submit details for approval'}
                             </Button>
                         </Form.Item>

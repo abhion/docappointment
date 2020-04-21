@@ -29,8 +29,7 @@ class AdmVerifyDoctor extends React.Component {
         {
             title: 'School',
             key: "3",
-            dataIndex: 'schoolOfMedicine',
-            key: ''
+            dataIndex: 'schoolOfMedicine'
         },
         {
             title: 'Action',
@@ -67,7 +66,7 @@ class AdmVerifyDoctor extends React.Component {
             })
             .catch(err => {
                 console.log(err.response)
-                if (err.response && err.response.status == 401) {
+                if (err.response && err.response.status === 401) {
                     this.props.dispatch(setLoggedInFalse());
                 }
             })
@@ -86,7 +85,7 @@ class AdmVerifyDoctor extends React.Component {
             })
             .catch(err => {
                 console.log(err.response)
-                if (err.response && err.response.status == 401) {
+                if (err.response && err.response.status === 401) {
                     this.props.dispatch(setLoggedInFalse());
                 }
             })
@@ -101,7 +100,7 @@ class AdmVerifyDoctor extends React.Component {
             })
             .catch(err => {
                 console.log(err.response)
-                if (err.response && err.response.status == 401) {
+                if (err.response && err.response.status === 401) {
                     this.props.dispatch(setLoggedInFalse());
                 }
             })
