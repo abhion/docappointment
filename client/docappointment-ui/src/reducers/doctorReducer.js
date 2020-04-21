@@ -1,4 +1,4 @@
-export const doctorReducer = (doctor, action) => {
+ const doctorReducer = (doctor = {}, action) => {
     switch (action.type) {
         case 'SET_SELECTED_DOCTOR':{
             
@@ -10,3 +10,5 @@ export const doctorReducer = (doctor, action) => {
             return doctor
     }
 }
+
+export default doctorReducer;

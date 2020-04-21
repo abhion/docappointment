@@ -312,4 +312,26 @@
 .selected-doctor .card-content h3,.selected-doctor .sub-content,.selected-doctor .sub-content h4,.selected-doctor .days-available-cal span{
   color: white !important;
 }
-
+.review-box-cl{
+  border: 1px solid rgb(220, 220, 220);
+  padding: 10px;
+  margin: 10px;
+}
+.review-header{
+  display: flex;
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+.reviewer-name{
+  margin: 1px;
+}
+.review-date{
+  color: #423f3f;
+    font-weight: 590;
+    font-size: 12.9px
+}
+.review-text-container{
+  border-top: 1px solid #e6e6e6;
+    padding: 20px;
+    margin-top: 10px;
+}

@@ -7,7 +7,7 @@ module.exports.addReview = (req, res) => {
             if (doctor) {
                 doctor.reviews.push({ patientId, rating, description })
                 doctor.save()
-                    .then(doctor => res.json(doctor.reviews))
+                    .then(doctor => res.json({reviews: doctor.reviews, message: 'Submitted feedback'}))
                     .catch(err => res.json(err))
             }
             else {
@@ -30,6 +30,7 @@ module.exports.updateReview = (req, res) => {
 module.exports.getDoctorReviews = (req, res) => {
     const { doctorUserId } = req.params;
     Doctor.findOne({userId: doctorUserId}, { reviews: 1 })
+    .populate({path: 'reviews.patientId', select: {name: 1}})
         .then(reviews => res.json(reviews))
         .catch(err => res.json(err))
 }

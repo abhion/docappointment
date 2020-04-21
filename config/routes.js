@@ -45,6 +45,7 @@ router.post('/specialization', specializationController.createSpecialization);
 router.get('/specializations', specializationController.listSpecializations);
 
 router.get('/doctors', doctorController.getDoctors);
+router.get('/doctor/:doctorUserId', authenticate.authenticateUser, doctorController.getDoctorById);
 router.get('/doctors/pending', authenticate.authenticateUser, authenticate.isAdmin, doctorController.getPendingStatusDoctors);
 router.post('/search/locality', doctorController.searchDoctorsInLocality);
 router.post('/search/sublocality', doctorController.searchDoctorsInSubLocality);

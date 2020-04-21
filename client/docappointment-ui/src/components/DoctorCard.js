@@ -44,8 +44,9 @@ function DoctorCard(props) {
                 <div style={{ textAlign: 'right' }}>
                     <Button type={props.selected ? 'default' : 'primary'}>
                         <Link to={{
-                            pathname: `/patient/feedback`,
-                            state:{doctor: props.doctor}
+                            pathname: `/patient/feedback/${user._id}`,
+                            state:{doctor: props.doctor},
+                            search:`?givefeedback=1`
                             }}>
                             Give Feedback</Link>
                     </Button>

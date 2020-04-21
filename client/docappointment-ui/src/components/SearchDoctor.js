@@ -112,6 +112,7 @@ class SearchDoctor extends React.Component {
                 }
                 else {
                     message.error('Could not find doctors at that location. Change the search text and try again');
+                    this.setState({loadSpinner: false});
                 }
 
             })
@@ -139,6 +140,7 @@ class SearchDoctor extends React.Component {
                 this.setState({ loadSpinner: false });
                 if (!data.length) {
                     message.info('Could not find doctors at that location. Change the search text and try again');
+                    this.setState({loadSpinner: false});
                 }
                 else {
 
@@ -171,6 +173,7 @@ class SearchDoctor extends React.Component {
                 this.setState({ loadSpinner: false });
                 if (!data.length) {
                     message.info('Could not find doctors at that location. Change the search text and try again');
+                    this.setState({loadSpinner: false})
                 } else {
                     this.props.history.push({
                         pathname: '/patient/search/results',

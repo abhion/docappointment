@@ -61,9 +61,12 @@ const doctorSchema = new Schema(
 
         reviews: [
             new Schema({
-                patientId: Schema.Types.ObjectId,
+                patientId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'user'
+                },
                 rating: {
-                    enum: [1, 2, 3, 4, 5],
+                    enum: [1, 1.5, 2, 2.5 , 3.5, 3, 4.5, 4, 5],
                     type: Number,
                     required: true
                 },

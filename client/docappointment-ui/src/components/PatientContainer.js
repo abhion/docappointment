@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect, Link } from 'react-router-dom';
 
 import SearchDoctor from './SearchDoctor';
+import ReviewsList from './ReviewsList';
 import DoctorSearchList from './DoctorSearchList';
 import { Layout, Menu } from 'antd';
 const { Sider, Content } = Layout;
@@ -30,6 +31,7 @@ class PatientContainer extends React.Component {
                     <Layout className="loggedin-content">
                         <Content>
                             <Route path="/patient/search" exact component={SearchDoctor} />
+                            <Route path="/patient/feedback/:doctorUserId" component={ReviewsList} />
                             <Route path="/patient/search/results" component={DoctorSearchList} />
                         </Content>
                     </Layout>

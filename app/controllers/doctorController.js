@@ -8,6 +8,14 @@ module.exports.getDoctors = (req, res) => {
         .catch(err => res.json(err))
 }
 
+
+module.exports.getDoctorById = (req, res) => {
+    const doctorUserId = req.params.doctorUserId;
+    Doctor.find({userId: doctorUserId}).populate('userId')
+        .then(doctor => res.json(doctor))
+        .catch(err => res.json(err));
+}
+
 module.exports.getPendingStatusDoctors = (req, res) => {
     Doctor.find({ verificationStatus: 'Pending' })
         .populate('specialization', 'name')
