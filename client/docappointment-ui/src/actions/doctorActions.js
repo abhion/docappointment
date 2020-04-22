@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const reqHeaders = {
-    headers: localStorage.getItem('authToken')
+    headers: {
+        'x-auth': localStorage.getItem('authToken')
+    }
 }
 
 export const setSelectedDoctor = (payload) => {
@@ -18,7 +20,7 @@ export const startGetDoctorFromId = (id) => {
         axios.get(`http://localhost:3038/doctor/${id}`, reqHeaders)
             .then(response => {
                 console.log(response);
-                dispatch(setSelectedDoctor(response.data))
+                dispatch(setSelectedDoctor(response.data[0]))
             })
             .catch(err => console.log(err))
 

@@ -52,7 +52,11 @@ function DoctorCard(props) {
                     </Button>
                 </div>
                 <div className="rate-container">
-                    <Rate style={{ color: '#dede00' }} value={4} disabled /><span className="ant-rate-text"></span>(9)
+                    <Rate style={{ color: '#dede00' }} 
+                    allowHalf
+                    value={doctor.avgRating.avgRating} 
+                    disabled />
+                    <span className="ant-rate-text"></span>({doctor.avgRating.numberOfReviews})
                 </div>
             </div>
 

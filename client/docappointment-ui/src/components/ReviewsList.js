@@ -29,7 +29,8 @@ class ReviewsList extends React.Component {
 
         const doctorUserId = this.props.match.params.doctorUserId;
         if (!this.props.location.state) {
-            startGetDoctorFromId(doctorUserId);
+            
+            this.props.dispatch(startGetDoctorFromId(doctorUserId));
         }
         else {
             this.fetchDoctorReviews();
@@ -38,15 +39,16 @@ class ReviewsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-
-        if (prevProps.doctor.user && prevProps.doctor.user._id !== this.props.doctor.user._id) {
+        debugger
+        if (!this.props.location.state && 
+            (!prevProps.doctor.userId || prevProps.doctor.userId._id !== this.props.doctor.userId._id)) {
             this.fetchDoctorReviews();
 
         }
     }
 
     fetchDoctorReviews = () => {
-
+        
         const doctor = (this.props.location.state && this.props.location.state.doctor) || this.props.doctor;
         axios.get(`http://localhost:3038/reviews/${doctor.userId._id}`)
             .then(response => {
@@ -106,7 +108,7 @@ class ReviewsList extends React.Component {
 
     render() {
 
-        const stateFromRouter = this.props.location.state.doctor;
+        const stateFromRouter = this.props.location.state && this.props.location.state.doctor;
         const doctor = stateFromRouter ? stateFromRouter : this.props.doctor;
         let user = {};
         console.log(doctor, doctor.reviews);
@@ -133,11 +135,12 @@ class ReviewsList extends React.Component {
             <PageHeader
                 className="page-header"
                 title={`Feedback for Dr. ${user.name}`}
+                subTitle={`${this.state.reviews.length} reviews`}
                 onBack={() => this.props.history.goBack()}
 
             />
 
-            <div>
+            <div className="reviews-container">
                 {reviewsEl}
             </div>
 

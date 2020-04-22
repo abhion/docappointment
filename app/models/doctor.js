@@ -66,7 +66,7 @@ const doctorSchema = new Schema(
                     ref: 'user'
                 },
                 rating: {
-                    enum: [1, 1.5, 2, 2.5 , 3.5, 3, 4.5, 4, 5],
+                    enum: [1, 1.5, 2, 2.5, 3.5, 3, 4.5, 4, 5],
                     type: Number,
                     required: true
                 },
@@ -90,20 +90,31 @@ const doctorSchema = new Schema(
             coordinates: {
                 type: [Number]
             }
-        
-    }
 
-});
+        }
+
+    },{toJSON: {getters: true}, toObject: {getters: true}});
+    doctorSchema.virtual('avgRating').get(function () {
+    
+        let avgRating = 0;
+        avgRating = this.reviews.reduce((acc, review) => {
+            return review.rating + acc;
+        }, 0);
+        avgRating = avgRating / this.reviews.length || 0;
+        return {avgRating, numberOfReviews:this.reviews.length};
+    })
+doctorSchema.set('toObject', {getters: true});
+doctorSchema.set('toJSON', {getters: true});
 
 doctorSchema.index({ location: '2dsphere' });
 
-doctorSchema.statics.isDoctorVerified = function(userId){
+doctorSchema.statics.isDoctorVerified = function (userId) {
     const Doctor = this;
-    return Doctor.findOne({userId}, {verificationStatus: 1})
+    return Doctor.findOne({ userId }, { verificationStatus: 1 })
         .then(status => {
             console.log(status, "DOCSTATUS");
-            
-            if(status.verificationStatus === 'Verified'){
+
+            if (status.verificationStatus === 'Verified') {
                 return Promise.resolve(true);
             }
             return Promise.reject(false);

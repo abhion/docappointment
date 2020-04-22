@@ -24,7 +24,7 @@ class PatientContainer extends React.Component {
                                 <Link to="/patient/search">Search Doctors</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
-                                <Link to="/admin/specialization">My Appointments</Link>
+                                <Link to="/patient/appointments">My Appointments</Link>
                             </Menu.Item>
                         </Menu>
                     </Sider>
@@ -33,6 +33,7 @@ class PatientContainer extends React.Component {
                             <Route path="/patient/search" exact component={SearchDoctor} />
                             <Route path="/patient/feedback/:doctorUserId" component={ReviewsList} />
                             <Route path="/patient/search/results" component={DoctorSearchList} />
+                            <Route path="/patient/appointments" component={DoctorSearchList} />
                         </Content>
                     </Layout>
                 </Layout>

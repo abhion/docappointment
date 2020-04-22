@@ -316,6 +316,7 @@
   border: 1px solid rgb(220, 220, 220);
   padding: 10px;
   margin: 10px;
+  flex-basis: 48%;
 }
 .review-header{
   display: flex;
@@ -334,4 +335,10 @@
   border-top: 1px solid #e6e6e6;
     padding: 20px;
     margin-top: 10px;
+    font-size: 15px;
+}
+.reviews-container{
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
 }
