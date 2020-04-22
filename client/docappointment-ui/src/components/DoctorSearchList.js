@@ -30,7 +30,7 @@ class DoctorSearchList extends React.Component {
         let doctorCard = null;
         if (data) {
             doctorCard = data.map(doctor => {
-                debugger
+                
                 return (
                     <DoctorCard
                         selected={this.state.selectedDoctorUserId === doctor.userId._id ? true: false}

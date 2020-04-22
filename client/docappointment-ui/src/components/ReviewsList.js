@@ -29,7 +29,7 @@ class ReviewsList extends React.Component {
 
         const doctorUserId = this.props.match.params.doctorUserId;
         if (!this.props.location.state) {
-            
+
             this.props.dispatch(startGetDoctorFromId(doctorUserId));
         }
         else {
@@ -39,8 +39,8 @@ class ReviewsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        debugger
-        if (!this.props.location.state && 
+        
+        if (!this.props.location.state &&
             (!prevProps.doctor.userId || prevProps.doctor.userId._id !== this.props.doctor.userId._id)) {
             this.fetchDoctorReviews();
 
@@ -48,24 +48,26 @@ class ReviewsList extends React.Component {
     }
 
     fetchDoctorReviews = () => {
-        
+
         const doctor = (this.props.location.state && this.props.location.state.doctor) || this.props.doctor;
         axios.get(`http://localhost:3038/reviews/${doctor.userId._id}`)
             .then(response => {
                 console.log(response, "Review");
-            
+
                 let loggedInUserReview = {}, feedbackAlreadyGiven = false;
                 const reviews = response.data.reviews.filter(review => {
                     if (review.patientId._id === this.props.loggedInUser._id) {
                         feedbackAlreadyGiven = true;
+                        this.setState({ feedbackAlreadyGiven: true })
                         loggedInUserReview = review;
                     }
                     return review.patientId._id !== this.props.loggedInUser._id
                 });
 
                 if (!feedbackAlreadyGiven) {
+                    this.setState({ feedbackAlreadyGiven: false })
                     const showAddPopupOnLoad = this.props.location.search && this.props.location.search.split('?')[1];
-                    
+
                     if (showAddPopupOnLoad) {
                         this.setState({ addModalVisible: true, reviews });
 
@@ -121,24 +123,29 @@ class ReviewsList extends React.Component {
         }
 
         const reviewsEl = this.state.reviews.map(review => {
-            
+
             return (
                 <ReviewBox
                     key={review._id}
                     review={review}
-                 />
+                />
             );
         })
 
         return <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: 13 }}>
+                <PageHeader
+                    className="page-header"
+                    style={{ flexBasis: '90%' }}
+                    title={`Feedback for Dr. ${user.name}`}
+                    subTitle={`${this.state.reviews.length} reviews`}
+                    onBack={() => this.props.history.goBack()}
 
-            <PageHeader
-                className="page-header"
-                title={`Feedback for Dr. ${user.name}`}
-                subTitle={`${this.state.reviews.length} reviews`}
-                onBack={() => this.props.history.goBack()}
-
-            />
+                />
+                {this.state.feedbackAlreadyGiven ? '' :
+                    <Button onClick={() => this.setState({ addModalVisible: true })}><i style={{ marginRight: 8 }} class="fas fa-plus"></i> Add Feedback</Button>
+                }
+            </div>
 
             <div className="reviews-container">
                 {reviewsEl}

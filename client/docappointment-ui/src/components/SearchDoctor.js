@@ -34,7 +34,7 @@ class SearchDoctor extends React.Component {
         // const autocomplete = new google.maps.places.Autocomplete(this.searchBoxRef, this.searchAutocompleteOptions);
         // autocomplete.setFields(['geometry', 'geometry.viewport', 'geometry.location']);
         // autocomplete.addListener('place_changed', () => {
-        //     debugger
+        //     
         //     const place = autocomplete.getPlace();
         //     if (!place.geometry) {
         //         message.info('No details available for searched text');

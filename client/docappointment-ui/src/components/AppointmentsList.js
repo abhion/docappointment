@@ -2,13 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import AppointmentBox from './AppointmentBox';
+import BookAppointment from './BookAppointment';
 import moment from 'moment';
-import { message, Empty } from 'antd';
+import { message, Empty, Drawer } from 'antd';
+import { startGetDoctorFromId } from '../actions/doctorActions';
 
 class AppointmentsList extends React.Component {
     state = {
         upcomingAppointments: [],
-        prevAppointments: []
+        prevAppointments: [],
+        bookAppointmentDrawerVisible: false
 
     }
 
@@ -55,8 +58,27 @@ class AppointmentsList extends React.Component {
             })
     }
 
-    render() {
+    setDoctorToBook = (doctor) => {
+        
+        this.props.dispatch(startGetDoctorFromId(doctor._id));
+        this.setState({
+            bookAppointmentDrawerVisible: true
+        })
+    }
 
+    onBookDrawerClosed = () => {
+        this.fetchAppointments();
+        this.setState({
+            bookAppointmentDrawerVisible: false
+        })
+    }
+
+
+    render() {
+        if (!this.props.user) {
+            return <>Loading</>
+        }
+        
         const upcomingAppointments = this.state.upcomingAppointments.map(appointment => {
 
             return <AppointmentBox
@@ -71,14 +93,13 @@ class AppointmentsList extends React.Component {
 
             return <AppointmentBox
                 key={appointment._id}
+                setDoctorToBook={this.setDoctorToBook}
                 isCancelled={appointment.cancellationDetails.isCancelled}
                 appointment={appointment}
                 user={this.props.user} />
         })
 
-        if (!this.props.user) {
-            return <>Loading</>
-        }
+    
         return (
             <div>
                 <h3>Upcoming Appointments</h3>
@@ -105,6 +126,19 @@ class AppointmentsList extends React.Component {
                         : <Empty />
                 }
 
+                <Drawer
+                    title="Book Appointment"
+                    width="40%"
+                    visible={this.state.bookAppointmentDrawerVisible}
+                    onClose={() => this.onBookDrawerClosed()}
+                >
+                    <BookAppointment 
+                    onBookComplete={this.onBookDrawerClosed}
+                    selectedDoctor={this.props.selectedDoctor}
+                    selectedDoctorUserId={this.props.selectedDoctor.userId && this.props.selectedDoctor.userId._id}
+                     />
+                </Drawer>
+
             </div>
         );
     }
@@ -113,7 +147,8 @@ class AppointmentsList extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.user
+        user: state.user,
+        selectedDoctor: state.selectedDoctor
     }
 }
 

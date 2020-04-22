@@ -170,6 +170,9 @@ class BookAppointment extends React.Component {
                         message.success(response.data.message);
                         this.setState({submitLoading: false});
                         this.fetchUpcomingAppointments();
+                        if(typeof this.props.onBookComplete === 'function'){
+                            this.props.onBookComplete();
+                        }
                     }
 
                     else if(response.data.errMessage){
@@ -184,11 +187,12 @@ class BookAppointment extends React.Component {
     render() {
 
         console.log(this.props);
-
-        
-
+        debugger
         const doctor = this.props.selectedDoctor;
         const user = doctor && doctor.userId;
+        if(!user){
+            return <>Loading</>
+        }
         const bookHeader = (
             <div>
                 <h3 style={{ textAlign: 'left' }}>Dr. {user.name}</h3>

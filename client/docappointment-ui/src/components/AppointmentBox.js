@@ -12,8 +12,9 @@ function AppointmentBox(props) {
     let userId = {};
     const appointment = props.appointment;
     const appointmentDate = moment(props.appointment.date);
+    
     const opposite = loggedInUserRole === 'Patient' ? appointment.doctorUserId : appointment.patientId;
-    debugger
+    
     const button = props.isUpcoming
         ? <Popconfirm
             title="Are you sure you want to cancel the appointment?"
@@ -23,7 +24,7 @@ function AppointmentBox(props) {
         >
             <Button type="primary" danger>Cancel</Button>
         </Popconfirm>
-        : <Button type="primary">Book Again</Button>
+        : <Button onClick={() => props.setDoctorToBook(appointment.doctorUserId)} type="primary">Book Again</Button>
     return (
         <div
             title={props.isCancelled ? 'This appointment was cancelled' : ''}
