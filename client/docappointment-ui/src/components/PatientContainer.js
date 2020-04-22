@@ -5,6 +5,7 @@ import SearchDoctor from './SearchDoctor';
 import ReviewsList from './ReviewsList';
 import DoctorSearchList from './DoctorSearchList';
 import { Layout, Menu } from 'antd';
+import AppointmentsList from './AppointmentsList';
 const { Sider, Content } = Layout;
 
 class PatientContainer extends React.Component {
@@ -33,7 +34,7 @@ class PatientContainer extends React.Component {
                             <Route path="/patient/search" exact component={SearchDoctor} />
                             <Route path="/patient/feedback/:doctorUserId" component={ReviewsList} />
                             <Route path="/patient/search/results" component={DoctorSearchList} />
-                            <Route path="/patient/appointments" component={DoctorSearchList} />
+                            <Route path="/patient/appointments" component={AppointmentsList} />
                         </Content>
                     </Layout>
                 </Layout>

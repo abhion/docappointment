@@ -28,7 +28,7 @@ module.exports.cancelAppointment = (req, res) => {
     const { id } = req.params;
     const cancellationDetails = req.body;
     Appointment.findByIdAndUpdate(id, { cancellationDetails }, { new: true })
-        .then(appointment => appointment ? res.json(appointment) : res.json('No appointment found'))
+        .then(appointment => appointment ? res.json({appointment, message: 'Cancelled'}) : res.json('No appointment found'))
         .catch(err => res.json(err))
 
 }
@@ -47,7 +47,7 @@ module.exports.getUpcomingAppointments = (req, res) => {
     const doctorUserId = req.params.doctorUserId;
     const today = new Date();
     today.setHours(0)
-    today.getMinutes(0)
+    today.setMinutes(0)
     Appointment.find({ doctorUserId,  "date": { "$gte": today }})
         .then(appointments => res.json(appointments))
         .catch(err => console.log(err))

@@ -45,18 +45,29 @@ function DoctorCard(props) {
                     <Button type={props.selected ? 'default' : 'primary'}>
                         <Link to={{
                             pathname: `/patient/feedback/${user._id}`,
-                            state:{doctor: props.doctor},
-                            search:`?givefeedback=1`
-                            }}>
+                            state: { doctor: props.doctor },
+                            search: `?givefeedback=1`
+                        }}>
                             Give Feedback</Link>
                     </Button>
                 </div>
                 <div className="rate-container">
-                    <Rate style={{ color: '#dede00' }} 
-                    allowHalf
-                    value={doctor.avgRating.avgRating} 
-                    disabled />
-                    <span className="ant-rate-text"></span>({doctor.avgRating.numberOfReviews})
+
+                    <Link
+                        title="Click to view feedback given by other users"
+                        to={
+                            {
+                                pathname: `/patient/feedback/${user._id}`,
+                                state: { doctor: props.doctor }
+                            }
+                        }>
+                        <Rate style={{ color: '#dede00' }}
+                            allowHalf
+                            value={doctor.avgRating.avgRating}
+                            disabled />
+                        <span className="ant-rate-text"></span>({doctor.avgRating.numberOfReviews})
+
+                </Link>
                 </div>
             </div>
 

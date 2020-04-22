@@ -341,4 +341,19 @@
   display: flex;
   justify-content: space-around;
   padding: 20px;
+  flex-wrap: wrap;
+}
+.appointment-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+.appointment-box{
+  border: 1px solid rgb(212, 211, 211);
+  padding: 14px;
+  flex-basis: 260px;
+  margin: 10px;
+}
+.cancelled-appointment{
+  background-color: rgba(230, 19, 19, 0.1);
+  border: 1px solid salmon;
 }
