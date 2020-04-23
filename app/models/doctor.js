@@ -95,13 +95,18 @@ const doctorSchema = new Schema(
 
     },{toJSON: {getters: true}, toObject: {getters: true}});
     doctorSchema.virtual('avgRating').get(function () {
-    
-        let avgRating = 0;
-        avgRating = this.reviews.reduce((acc, review) => {
-            return review.rating + acc;
-        }, 0);
-        avgRating = avgRating / this.reviews.length || 0;
-        return {avgRating, numberOfReviews:this.reviews.length};
+        console.log("AV", this.reviews, "EAV");
+        if(this.reviews){
+            let avgRating = 0;
+            avgRating = this.reviews.reduce((acc, review) => {
+                return review.rating + acc;
+            }, 0);
+            avgRating = avgRating / this.reviews.length || 0;
+            return {avgRating, numberOfReviews:this.reviews.length};
+        }
+        else{
+            return null;
+        }
     })
 doctorSchema.set('toObject', {getters: true});
 doctorSchema.set('toJSON', {getters: true});

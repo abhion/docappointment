@@ -41,6 +41,7 @@ class AppointmentsList extends React.Component {
     }
 
     fetchAppointments = () => {
+        debugger
         axios.get(`http://localhost:3038/appointments/${this.props.user._id}`, this.reqHeaders)
             .then(response => {
                 console.log(response);

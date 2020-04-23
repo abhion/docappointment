@@ -190,9 +190,9 @@ class BookAppointment extends React.Component {
         debugger
         const doctor = this.props.selectedDoctor;
         const user = doctor && doctor.userId;
-        if(!user){
-            return <>Loading</>
-        }
+        // if(!user){
+        //     return <>Loading</>
+        // }
         const bookHeader = (
             <div>
                 <h3 style={{ textAlign: 'left' }}>Dr. {user.name}</h3>

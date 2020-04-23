@@ -13,7 +13,6 @@ class LoginForm extends React.Component {
     loginFormRef = React.createRef();
 
     onFinish = (loginData) => {
-        console.log(loginData);
         this.setState({btnLoading: true})
         axios.post('http://localhost:3038/login', loginData)
             .then(response => {
@@ -24,7 +23,7 @@ class LoginForm extends React.Component {
                     this.props.dispatch(setLoggedInTrue());
                     this.props.dispatch(setLoggedInUser(response.data.user));
                     if(response.data.user.role === 'Doctor'){
-                        this.props.history.push('/doctors')
+                        this.props.history.push('/doctor/appointments')
                     }
                     else if(response.data.user.role === 'Patient'){
                         this.props.history.push('/patient/search')
