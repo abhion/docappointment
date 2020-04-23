@@ -16,7 +16,7 @@ function AppointmentBox(props) {
     
     const opposite = loggedInUserRole === 'Patient' ? appointment.doctorUserId : appointment.patientId;
     
-    debugger
+    
     let button = '';
     if(loggedInUserRole === 'Patient'){
         button = props.isUpcoming
@@ -53,7 +53,7 @@ function AppointmentBox(props) {
             </div>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 12}}>
             <div>
-            <i class="fas fa-mobile-alt"></i> <span style={{fontWeight: 500, marginLeft: 4}}>{opposite.phone}</span>
+            <i className="fas fa-mobile-alt"></i> <span style={{fontWeight: 500, marginLeft: 4}}>{opposite.phone}</span>
             </div>
             <div style={{ textAlign: 'right', margin: 10 }}>
 

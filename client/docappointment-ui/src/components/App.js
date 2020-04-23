@@ -3,7 +3,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 import { Layout, Menu, Drawer, Dropdown } from 'antd';
 import Landing from './Landing';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setLoggedInFalse, setLoggedInTrue, startGetLoggedInUser, setLoggedInUser } from '../actions/usersAction';
 import LoginForm from './LoginForm';
@@ -134,7 +134,10 @@ class App extends React.Component {
         if(this.props.user.role === 'Doctor')
         {
           content = <Route path="/doctor" component={DoctorContainer} />
-          // redirecTo = <Redirect to="/doctor" />
+          if(this.props.history.path === '/'){
+            redirecTo = <Redirect to="/doctor" />
+
+          }
         }
         else if(this.props.user.role === 'Patient'){
           content = <Route path="/patient" component={PatientContainer} />

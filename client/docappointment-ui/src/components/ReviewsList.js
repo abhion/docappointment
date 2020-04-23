@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageHeader, Form, Row, Col, Input, Modal, Button, Rate, message } from 'antd';
+import { PageHeader, Form, Row, Col, Input, Modal, Button, Rate, message, Empty } from 'antd';
 import { startGetDoctorFromId } from '../actions/doctorActions';
 import ReviewBox from './ReviewBox';
 import { connect } from 'react-redux';
@@ -26,9 +26,11 @@ class ReviewsList extends React.Component {
     addFeedbackFormRef = React.createRef();
 
     componentDidMount() {
-
+        
         const doctorUserId = this.props.match.params.doctorUserId;
-        if (!this.props.location.state) {
+        debugger
+        
+        if (!Object.keys(this.props.doctor).length) {
 
             this.props.dispatch(startGetDoctorFromId(doctorUserId));
         }
@@ -39,21 +41,21 @@ class ReviewsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        
-        if (!this.props.location.state &&
-            (!prevProps.doctor.userId || prevProps.doctor.userId._id !== this.props.doctor.userId._id)) {
+        debugger
+        if (
+            (!prevProps.doctor.userId)) {
             this.fetchDoctorReviews();
 
         }
     }
 
     fetchDoctorReviews = () => {
-
-        const doctor = (this.props.location.state && this.props.location.state.doctor) || this.props.doctor;
+         debugger
+        const doctor =  this.props.doctor;
         axios.get(`http://localhost:3038/reviews/${doctor.userId._id}`)
             .then(response => {
                 console.log(response, "Review");
-
+                debugger
                 let loggedInUserReview = {}, feedbackAlreadyGiven = false;
                 const reviews = response.data.reviews.filter(review => {
                     if (review.patientId._id === this.props.loggedInUser._id) {
@@ -65,12 +67,11 @@ class ReviewsList extends React.Component {
                 });
 
                 if (!feedbackAlreadyGiven) {
-                    this.setState({ feedbackAlreadyGiven: false })
+                    this.setState({ feedbackAlreadyGiven: false, reviews })
                     const showAddPopupOnLoad = this.props.location.search && this.props.location.search.split('?')[1];
 
                     if (showAddPopupOnLoad) {
-                        this.setState({ addModalVisible: true, reviews });
-
+                        this.setState({ addModalVisible: true });
                     }
                 }
                 else {
@@ -109,9 +110,8 @@ class ReviewsList extends React.Component {
     }
 
     render() {
-
-        const stateFromRouter = this.props.location.state && this.props.location.state.doctor;
-        const doctor = stateFromRouter ? stateFromRouter : this.props.doctor;
+        
+        const doctor = this.props.doctor;
         let user = {};
         console.log(doctor, doctor.reviews);
         if (doctor.userId) {
@@ -142,13 +142,13 @@ class ReviewsList extends React.Component {
                     onBack={() => this.props.history.goBack()}
 
                 />
-                {this.state.feedbackAlreadyGiven ? '' :
-                    <Button onClick={() => this.setState({ addModalVisible: true })}><i style={{ marginRight: 8 }} class="fas fa-plus"></i> Add Feedback</Button>
+                {this.state.feedbackAlreadyGiven || this.props.loggedInUser.role === 'Doctor' ? '' :
+                    <Button onClick={() => this.setState({ addModalVisible: true })}><i style={{ marginRight: 8 }} className="fas fa-plus"></i> Add Feedback</Button>
                 }
             </div>
 
             <div className="reviews-container">
-                {reviewsEl}
+              {reviewsEl.length ? reviewsEl: <Empty /> }
             </div>
 
             <Modal

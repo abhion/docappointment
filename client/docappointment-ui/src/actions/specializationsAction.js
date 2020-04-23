@@ -16,7 +16,11 @@ export const setSpecializations = (payload) => {
 
 export const addSpecialization = (payload, message, onAddFinish) => {
     return (dispatch) => {
-        axios.post(`http://localhost:3038/specialization`, payload, reqHeaders)
+        axios.post(`http://localhost:3038/specialization`, payload, {
+            headers: {
+                'x-auth': localStorage.getItem('authToken')
+            }
+        })
             .then(response => {
                 console.log(response);
                 if(response.data.message){

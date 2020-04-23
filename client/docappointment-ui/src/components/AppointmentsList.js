@@ -60,7 +60,7 @@ class AppointmentsList extends React.Component {
     }
 
     setDoctorToBook = (doctor) => {
-        
+        debugger
         this.props.dispatch(startGetDoctorFromId(doctor._id));
         this.setState({
             bookAppointmentDrawerVisible: true

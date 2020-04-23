@@ -53,7 +53,11 @@ class AdmVerifyDoctor extends React.Component {
 
     acceptDoctor = (doctor) => {
         
-        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Verified' }, this.reqHeaders)
+        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Verified' }, {
+            headers: {
+                'x-auth': localStorage.getItem('authToken')
+            }
+        })
             .then(response => {
                 console.log(response);
                 if (response.data.message) {
@@ -72,7 +76,11 @@ class AdmVerifyDoctor extends React.Component {
             })
     }
     rejectDoctor = (doctor) => {
-        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Rejected' }, this.reqHeaders)
+        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Rejected' }, {
+            headers: {
+                'x-auth': localStorage.getItem('authToken')
+            }
+        })
             .then(response => {
                 console.log(response);
                 if (response.data.message) {
@@ -93,7 +101,11 @@ class AdmVerifyDoctor extends React.Component {
 
     fetchPendingDoctors = () => {
         
-        axios.get(`http://localhost:3038/doctors/pending`, this.reqHeaders)
+        axios.get(`http://localhost:3038/doctors/pending`, {
+            headers: {
+                'x-auth': localStorage.getItem('authToken')
+            }
+        })
             .then(response => {
                 console.log(response.data);
                 this.setState({ doctorList: response.data })

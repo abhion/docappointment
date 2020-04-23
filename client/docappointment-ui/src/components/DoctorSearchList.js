@@ -2,21 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PageHeader } from 'antd';
 import DoctorCard from './DoctorCard';
+import {setSelectedDoctor} from '../actions/doctorActions';
 // import axios from 'axios';
 import BookAppointment from './BookAppointment';
 
 class DoctorSearchList extends React.Component {
 
-    state = {
-        selectedDoctor: '',
-        selectedDoctorUserId: ''
-    }
+    // state = {
+    //     selectedDoctor: '',
+    //     selectedDoctorUserId: ''
+    // }
 
-    handleDoctorSelected = (selectedDoctorUserId, selectedDoctor) => {
-        this.setState({
-            selectedDoctor,
-            selectedDoctorUserId
-        })
+    handleDoctorSelected = (selectedDoctor) => {
+        debugger
+        this.props.dispatch(setSelectedDoctor(selectedDoctor));
     }
 
     render() {
@@ -33,7 +32,6 @@ class DoctorSearchList extends React.Component {
                 
                 return (
                     <DoctorCard
-                        selected={this.state.selectedDoctorUserId === doctor.userId._id ? true: false}
                         key={doctor.userId._id}
                         doctor={doctor}
                         handleDoctorSelected={this.handleDoctorSelected} />
@@ -53,7 +51,7 @@ class DoctorSearchList extends React.Component {
 
                     </div>
                     <div style={{ flexBasis: '44%' }}>
-                        <BookAppointment selectedDoctor={this.state.selectedDoctor} selectedDoctorUserId={this.state.selectedDoctorUserId} />
+                        <BookAppointment  />
                     </div>
                 </div>
             </div>

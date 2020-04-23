@@ -3,6 +3,7 @@ import moment from 'moment';
 import doctorUserIcon from '../images/doctor-user.png';
 import { Rate, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 function DoctorCard(props) {
     const doctor = props.doctor;
@@ -10,12 +11,15 @@ function DoctorCard(props) {
     const pic = user.photo ? `http://localhost:3038/${user.email}/${user.photo}` : doctorUserIcon;
     const experience = moment().diff(moment(doctor.practiseStartDate), 'years');
     const hospital = doctor.practisingAt;
-    const daysAvailable = doctor.daysAvailable.map(day => <span key={day} className="days-available">{day.slice(0, 3)}</span>)
+    const daysAvailable = doctor.daysAvailable.map(day => <span key={day} className="days-available">{day.slice(0, 3)}</span>);
+    const selected = props.selectedDoctorFromList.userId && props.selectedDoctorFromList.userId._id === props.doctor.userId._id;
+
+
     return (
 
         <div key={user._id}
-            className={props.selected ? 'doctor-card selected-doctor' : 'doctor-card'}
-            onClick={() => props.handleDoctorSelected(user._id, doctor)}
+            className={selected ? 'doctor-card selected-doctor' : 'doctor-card'}
+            onClick={() => props.handleDoctorSelected(doctor)}
         >
             <div className="image-container">
                 <img className="card-image" src={pic} alt="doc-img" />
@@ -42,10 +46,10 @@ function DoctorCard(props) {
                 <div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                    <Button type={props.selected ? 'default' : 'primary'}>
-                        <Link to={{
+                    <Button type={selected ? 'default' : 'primary'}>
+                        <Link 
+                        to={{
                             pathname: `/patient/feedback/${user._id}`,
-                            state: { doctor: props.doctor },
                             search: `?givefeedback=1`
                         }}>
                             Give Feedback</Link>
@@ -77,4 +81,11 @@ function DoctorCard(props) {
 
 }
 
-export default DoctorCard;  
+function mapStateToProps(state){
+
+    return {
+        selectedDoctorFromList: state.selectedDoctor
+    }
+}
+
+export default connect(mapStateToProps)(DoctorCard);  

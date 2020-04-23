@@ -31,7 +31,11 @@ export const setLoggedInFalse = () => {
 export const startGetLoggedInUser = () => {
 
     return (dispatch) => {
-        axios.get(`http://localhost:3038/user/current`, reqHeaders)
+        axios.get(`http://localhost:3038/user/current`, {
+            headers: {
+                'x-auth': localStorage.getItem('authToken')
+            }
+        })
             .then(response => {
                 console.log("this be the logged iu", response);
                 

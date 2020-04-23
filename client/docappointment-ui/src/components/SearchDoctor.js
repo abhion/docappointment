@@ -5,6 +5,7 @@ import PlacesSearch from './PlacesSearch';
 // import { geocodeByAddress } from 'react-places-autocomplete';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
+import {setSelectedDoctor} from '../actions/doctorActions';
 const { Option } = Select;
 
 
@@ -30,6 +31,7 @@ class SearchDoctor extends React.Component {
     }
 
     componentDidMount() {
+        this.props.dispatch(setSelectedDoctor({}));
         // const google = window.google;
         // const autocomplete = new google.maps.places.Autocomplete(this.searchBoxRef, this.searchAutocompleteOptions);
         // autocomplete.setFields(['geometry', 'geometry.viewport', 'geometry.location']);

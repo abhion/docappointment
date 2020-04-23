@@ -24,14 +24,15 @@ class BookAppointment extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.selectedDoctorUserId !== this.props.selectedDoctorUserId) {
+        if (!prevProps.selectedDoctorForBooking.userId || 
+            (prevProps.selectedDoctorForBooking.userId._id !== this.props.selectedDoctorForBooking.userId._id)) {
             this.setState({ loadSpinner: true });
             this.fetchUpcomingAppointments();
         }
     }
 
     fetchUpcomingAppointments = () => {
-        axios.get(`http://localhost:3038/appointments/available/${this.props.selectedDoctorUserId}`, this.reqHeaders)
+        axios.get(`http://localhost:3038/appointments/available/${this.props.selectedDoctorForBooking.userId._id}`, this.reqHeaders)
         .then(response => {
             console.log(response, "Appointemnts");
             const appointments = response.data.map(appointment => moment(appointment.date).local());
@@ -50,7 +51,7 @@ class BookAppointment extends React.Component {
     setDaysAvailable = () => {
         const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-        const doctor = this.props.selectedDoctor;
+        const doctor = this.props.selectedDoctorForBooking;
         const today = moment();
         const days = [];
         const todaysIndex = doctor.daysAvailable.findIndex(day => day === today.format('dddd'));
@@ -114,7 +115,7 @@ class BookAppointment extends React.Component {
 
     createTimeSlots = (date) => {
 
-        const doctor = this.props.selectedDoctor;
+        const doctor = this.props.selectedDoctorForBooking;
         const appointmentDuration = doctor.appointmentDuration;
         const from = moment(date.format('YYYY-MM-DD') + ' ' + doctor.fromTo.from);
         const to = moment(date.format('YYYY-MM-DD') + ' ' + doctor.fromTo.to);
@@ -160,7 +161,7 @@ class BookAppointment extends React.Component {
         axios.post(`http://localhost:3038/appointment`, 
         {
             date: this.state.selectedAppointmentTime.toISOString(),
-            doctorUserId: this.props.selectedDoctorUserId,
+            doctorUserId: this.props.selectedDoctorForBooking.userId._id,
             patientId: this.props.loggedInUser._id
         }, this.reqHeaders
                )
@@ -184,20 +185,26 @@ class BookAppointment extends React.Component {
                 .catch(err => console.log(err))
     }
 
+    isObjectEmpty = (obj) => {
+        return Object.keys(obj).length ? false : true;
+    }
+
     render() {
 
         console.log(this.props);
-        debugger
-        const doctor = this.props.selectedDoctor;
+        
+        const doctor = this.props.selectedDoctorForBooking;
         const user = doctor && doctor.userId;
-        // if(!user){
-        //     return <>Loading</>
-        // }
-        const bookHeader = (
-            <div>
-                <h3 style={{ textAlign: 'left' }}>Dr. {user.name}</h3>
-            </div>
-        );
+        let bookHeader = '';
+        debugger
+        if(user){
+             bookHeader = (
+                <div>
+                    <h3 style={{ textAlign: 'left' }}>Dr. {user.name}</h3>
+                </div>
+            );
+        }
+       
 
         const dayTimeSlots = [];
         let availableCount = 0;
@@ -245,12 +252,12 @@ class BookAppointment extends React.Component {
                 <div style={{ flexBasis: '80%', display: 'flex', flexWrap: 'wrap' }}>{dayTimeSlots[2]}</div>
             </div>
         ) : '';
-
+            debugger
         return (
             <div className="book-box">
                 <div className="book-header">
                     {
-                        !doctor ? <h3>Select a doctor to show available slots</h3> :
+                        this.isObjectEmpty(doctor) ? <h3>Select a doctor to show available slots</h3> :
                             <div>{bookHeader}</div>
                     }
                 </div>
@@ -273,7 +280,7 @@ class BookAppointment extends React.Component {
                     onCancel={() => this.setState({confirmPopupVisible: false})}
                 >
                     <div>
-                        Book Appointment with <strong> Dr. {user.name}</strong> on 
+                        Book Appointment with <strong> Dr. {user && user.name}</strong> on 
                         {this.state.selectedAppointmentTime && <strong> {this.state.selectedAppointmentTime.format('dddd DD MMM YYYY hh:mm A')}</strong>}
                     </div>
                 </Modal>
@@ -285,7 +292,8 @@ class BookAppointment extends React.Component {
 
 function mapStateToProps(state){
     return {
-        loggedInUser: state.user
+        loggedInUser: state.user,
+        selectedDoctorForBooking: state.selectedDoctor
     }
 }
 
