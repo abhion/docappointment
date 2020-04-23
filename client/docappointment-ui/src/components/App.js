@@ -35,10 +35,10 @@ class App extends React.Component {
     }
   }
 
- 
+
 
   componentDidMount() {
-    
+
     if (localStorage.getItem('authToken') && !this.props.isLoggedIn) {
       this.props.dispatch(setLoggedInTrue());
       this.props.dispatch(startGetLoggedInUser())
@@ -50,10 +50,14 @@ class App extends React.Component {
 
     this.unlisten = this.props.history.listen((location, action) => {
       console.log(location, action);
-      if(location.pathname !== '/' && !localStorage.getItem('authToken')){
+      if (location.pathname !== '/' && !localStorage.getItem('authToken')) {
         this.props.history.push('/');
       }
-      if(this.props.history.location.pathname !== '/'){
+      if (this.props.history.location.pathname !== '/'
+      && this.props.history.location.pathname !== '/admin'
+      && this.props.history.location.pathname !== '/patient'
+      && this.props.history.location.pathname !== '/doctor'
+      ) {
 
         localStorage.setItem('current_path', this.props.history.location.pathname || '');
       }
@@ -69,8 +73,8 @@ class App extends React.Component {
   }
 
   logout = () => {
-    
-    axios.delete(`http://localhost:3038/logout`,  {
+
+    axios.delete(`http://localhost:3038/logout`, {
       headers: {
         'x-auth': localStorage.getItem('authToken')
       }
@@ -87,7 +91,7 @@ class App extends React.Component {
           this.props.dispatch(setLoggedInFalse());
         }
       })
-      
+
   }
 
   render() {
@@ -107,13 +111,13 @@ class App extends React.Component {
           <Menu.Item key="2">
             <Dropdown overlay={dropdownMenu}>
               <div style={{ display: 'flex' }}>
-              <div>
-                  {this.props.user.role === 'Doctor' ? 'Dr. ' : '' }{ this.props.user.name}
+                <div>
+                  {this.props.user.role === 'Doctor' ? 'Dr. ' : ''}{this.props.user.name}
                 </div>
                 <div>
                   <img src={userIconPath} className="header-image" alt="header-img" />
                 </div>
-               
+
               </div>
 
             </Dropdown>
@@ -129,26 +133,28 @@ class App extends React.Component {
           </Menu>
         </>
       )
-      let content = '', redirecTo = '';
-      if(this.props.user.role){
-        if(this.props.user.role === 'Doctor')
-        {
-          content = <Route path="/doctor" component={DoctorContainer} />
-          if(this.props.history.path === '/'){
-            redirecTo = <Redirect to="/doctor" />
-
-          }
-        }
-        else if(this.props.user.role === 'Patient'){
-          content = <Route path="/patient" component={PatientContainer} />
-          // redirecTo = <Redirect to="/patient/search" />
-        }
-        else if(this.props.user.role === 'Admin'){
-          content = (<Route path="/admin" component={AdminContainer} />)
-          // redirecTo = <Redirect to="/admin/doctors/verify" />
-         
+    let content = '', redirecTo = '';
+    if (this.props.user.role) {
+      debugger
+      if (this.props.user.role === 'Doctor') {
+        content = <Route path="/doctor" component={DoctorContainer} />
+        if (this.props.history.location.pathname === '/' || this.props.history.location.pathname.split('/')[1] !== 'doctor') {
+          redirecTo = <Redirect to="/doctor" />
         }
       }
+      else if (this.props.user.role === 'Patient') {
+        content = <Route path="/patient" component={PatientContainer} />
+        if (this.props.history.location.pathname === '/' || this.props.history.location.pathname.split('/')[1] !== 'patient') {
+          redirecTo = <Redirect to="/patient" />
+        }
+      }
+      else if (this.props.user.role === 'Admin') {
+        content = (<Route path="/admin" component={AdminContainer} />)
+        if (this.props.history.location.pathname === '/' || this.props.history.location.pathname.split('/')[1] !== 'admin') {
+          redirecTo = <Redirect to="/admin" />
+        }
+      }
+    }
 
     return (
       <div className="App">
@@ -165,10 +171,10 @@ class App extends React.Component {
           <Content className="site-layout" style={{ padding: '0px', marginTop: 64 }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
               <Route path="/" component={Landing} exact />
-             {
-               content
-             }
-             {redirecTo}
+              {
+                content
+              }
+              {redirecTo}
             </div>
           </Content>
         </Layout>

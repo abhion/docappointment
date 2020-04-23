@@ -5,6 +5,7 @@ import DoctorCard from './DoctorCard';
 import {setSelectedDoctor} from '../actions/doctorActions';
 // import axios from 'axios';
 import BookAppointment from './BookAppointment';
+import { Redirect } from 'react-router-dom';
 
 class DoctorSearchList extends React.Component {
 
@@ -20,6 +21,9 @@ class DoctorSearchList extends React.Component {
 
     render() {
         // console.log(this.props);
+        if(!this.props.location.data){
+          return  <Redirect to="/patient/search" />
+        }
         const data = this.props.location.state.data;
         const text = this.props.location.state.text;
         const searchedLocation = text.selectedLocation.split(',')[0];

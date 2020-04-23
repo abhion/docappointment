@@ -25,6 +25,11 @@ class DoctorContainer extends React.Component{
     }
 
     render(){
+        let path = '';
+        if (this.props.history.location.pathname === '/doctor' || this.props.history.location.pathname === '/doctor/') {
+
+            path = localStorage.getItem('current_path') || '/doctor/appointments';
+        }
         console.log(this.props);
         if(!this.props.loggedInUser){
             return <>Loading</>
@@ -35,10 +40,14 @@ class DoctorContainer extends React.Component{
             <Layout>
                 <Sider>
                     <Menu className="side-menu">
-                        <Menu.Item key="1">
+                        <Menu.Item 
+                        className={path === '/doctor/appointments' ? 'selected-menu-item': ''}
+                        key="1">
                             <Link to="/doctor/appointments">Appointments</Link>
                         </Menu.Item>
-                        <Menu.Item key="2">
+                        <Menu.Item 
+                        className={path === '/doctor/feedback' ? 'selected-menu-item': ''}
+                        key="2">
                             <Link to={`/doctor/feedback/${this.props.loggedInUser._id}`}>Feedback</Link>
                         </Menu.Item>
                     </Menu>
@@ -51,7 +60,7 @@ class DoctorContainer extends React.Component{
                 </Layout>
             </Layout>
 
-            {/* {path ? <Redirect to={path} /> : ''} */}
+            {path ? <Redirect to={path} /> : ''}
         </div>
           
         );

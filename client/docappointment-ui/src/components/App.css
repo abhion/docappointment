@@ -361,3 +361,14 @@
   display: flex;
   padding: 10px;
 }
+.ant-menu-item:hover{
+  background-color: rgb(191, 214, 255);
+}
+.ant-menu-item:hover li{
+  color: white !important;
+}
+
+.selected-menu-item{
+  background-color: rgb(191, 214, 255);
+  border-left: 3px solid #fccd26;
+}

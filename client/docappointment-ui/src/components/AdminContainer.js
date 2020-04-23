@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Redirect } from 'react-router-dom';
 import AdmVerifyDoctor from './AdmVerifyDoctor';
 import AdmSpecialization from './AdmSpecialization';
 import { connect } from 'react-redux';
@@ -12,6 +12,12 @@ class AdminContainer extends React.Component {
         console.log(this.props);
     }
     render() {
+        let path = '';
+        if (this.props.history.location.pathname === '/admin' || this.props.history.location.pathname === '/admin/') {
+
+            path = localStorage.getItem('current_path') || '/admin/doctors/verify';
+        }
+        debugger
         return (
             <Layout>
                 <Sider>
@@ -30,6 +36,7 @@ class AdminContainer extends React.Component {
                         <Route path="/admin/specialization" component={AdmSpecialization} />
                     </Content>
                 </Layout>
+                {path ? <Redirect to={path} /> : ''}
             </Layout>
         );
     }

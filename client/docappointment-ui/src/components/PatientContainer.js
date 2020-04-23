@@ -10,21 +10,28 @@ const { Sider, Content } = Layout;
 
 class PatientContainer extends React.Component {
     render() {
+
         let path = '';
-        if (this.props.history.location.pathname === '/patient') {
+        if (this.props.history.location.pathname === '/patient' || this.props.history.location.pathname === '/patient/') {
 
             path = localStorage.getItem('current_path') || '/patient/search';
         }
-
+        else{
+            path = this.props.history.location.pathname;
+        }
+        debugger
         return (
             <div className="content-container">
                 <Layout>
                     <Sider>
                         <Menu className="side-menu">
-                            <Menu.Item key="1">
+                            <Menu.Item key="1" 
+                            className={path === '/patient/search' ? 'selected-menu-item': ''}>
                                 <Link to="/patient/search">Search Doctors</Link>
                             </Menu.Item>
-                            <Menu.Item key="2">
+                            <Menu.Item
+                            className={path === '/patient/appointments' ? 'selected-menu-item': ''}
+                             key="2">
                                 <Link to="/patient/appointments">My Appointments</Link>
                             </Menu.Item>
                         </Menu>
