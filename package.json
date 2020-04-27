@@ -29,5 +29,3 @@
     "validator": "^13.0.0"
   }
 }
-
-// "install": "cd client/docappointment-ui && npm run build",
