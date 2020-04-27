@@ -2,7 +2,7 @@
 app/security/private.pem
 /userfiles
 /client/docappointment-ui/public/index.html
-client/docappointment-ui/node_modules
+client/node_modules
 client/docappointment-ui/package-lock.json
 client/docappointment-ui/package.json
 
