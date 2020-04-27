@@ -7,4 +7,4 @@ const setupDB = () => {
         .catch(err => console.log(err))
 }
 
-module.exports = setupDB;
+module.exports = setupDB; 
