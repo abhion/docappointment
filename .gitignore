@@ -5,7 +5,7 @@ app/security/private.pem
 client/docappointment-ui/node_modules
 client/docappointment-ui/package-lock.json
 client/docappointment-ui/package.json
-.env
+
 # Logs
 logs
 *.log
