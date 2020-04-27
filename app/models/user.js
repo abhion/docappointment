@@ -87,6 +87,7 @@ userSchema.methods.generateToken = function () {
             .then(savedUser => {
                 return Promise.resolve(token);
             })
+            .catch(err => console.log(err))
 
 
     } else {
@@ -98,18 +99,8 @@ userSchema.methods.generateToken = function () {
 
 userSchema.methods.verifyCredentials = function (password) {
     const user = this;
-    console.log(user);
     return bcryptjs.compare(password, user.password)
-        .then(result => {
-        console.log(password);
-        console.log("==================");
-        console.log(user.password);
-        console.log("==================");
-        console.log("==================");
-
-        return  Promise.resolve(result)
-        
-        })
+        .then(result => Promise.resolve(result))
         .catch(err => console.log(err))
 }
 
