@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import { setLoggedInFalse } from './usersAction';
 
 const reqHeaders = {

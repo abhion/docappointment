@@ -14,7 +14,7 @@ import doctorUserIcon from '../images/doctor-user.png';
 import AdminContainer from './AdminContainer';
 import DoctorContainer from './DoctorContainer';
 import PatientContainer from './PatientContainer';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import { Widget, toggleWidget, addResponseMessage, renderCustomComponent, setBadgeCount } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
 import { setupSocket, acceptRejectChatRequest, setEssentialMethods, sendMessage, leaveChat } from '../utility-functions/setupSocket';

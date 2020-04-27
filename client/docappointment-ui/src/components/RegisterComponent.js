@@ -3,7 +3,7 @@ import { Form, Row, Col, Button, Input, Radio, DatePicker, Upload, Select, Check
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { TimePicker, message } from 'antd';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import { geocodeByAddress } from 'react-places-autocomplete';
 import PlacesSearch from './PlacesSearch';
 

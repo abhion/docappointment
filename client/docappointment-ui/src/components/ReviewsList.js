@@ -3,7 +3,7 @@ import { PageHeader, Form, Row, Col, Input, Modal, Button, Rate, message, Empty 
 import { startGetDoctorFromId } from '../actions/doctorActions';
 import ReviewBox from './ReviewBox';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 
 
 const { TextArea } = Input;

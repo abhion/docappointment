@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import AppointmentBox from './AppointmentBox';
 import BookAppointment from './BookAppointment';
 import moment from 'moment';

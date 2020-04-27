@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import { Table, Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
 import { setLoggedInFalse } from '../actions/usersAction';

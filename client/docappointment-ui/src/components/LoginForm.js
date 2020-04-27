@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, Row, Col, Button, Input, message } from 'antd';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import { setLoggedInUser, setLoggedInTrue } from '../actions/usersAction';
 import io from 'socket.io-client';
 

@@ -3,7 +3,7 @@ import { Select, message } from 'antd';
 import { connect } from 'react-redux';
 import PlacesSearch from './PlacesSearch';
 // import { geocodeByAddress } from 'react-places-autocomplete';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import Loader from 'react-loader-spinner';
 import {setSelectedDoctor} from '../actions/doctorActions';
 const { Option } = Select;

@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axios from '../utility-functions/axiosConfig';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
 import { Modal, message } from 'antd';

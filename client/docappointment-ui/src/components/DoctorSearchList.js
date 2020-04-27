@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { PageHeader } from 'antd';
 import DoctorCard from './DoctorCard';
 import {setSelectedDoctor} from '../actions/doctorActions';
-// import axios from 'axios';
+// import axios from '../utility-functions/axiosConfig';
 import BookAppointment from './BookAppointment';
 import { Redirect } from 'react-router-dom';
 
