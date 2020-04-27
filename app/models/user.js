@@ -98,13 +98,13 @@ userSchema.methods.generateToken = function () {
 
 userSchema.methods.verifyCredentials = function (password) {
     const user = this;
+    console.log(user);
     return bcryptjs.compare(password, user.password)
         .then(result => {
         console.log(password);
         console.log("==================");
         console.log(user.password);
         console.log("==================");
-        console.log(user);
         console.log("==================");
 
         return  Promise.resolve(result)
