@@ -1,4 +1,4 @@
-import axios from '../utility-functions/axiosConfig';
+import axios from 'axios';
 
 const instance = axios.create({
    
