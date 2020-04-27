@@ -150,7 +150,7 @@ class App extends React.Component {
           }
         }
 
-    axios.delete(`http://localhost:3038/logout`, {
+    axios.delete(`/logout`, {
       headers: {
         'x-auth': localStorage.getItem('authToken')
       }
@@ -196,17 +196,17 @@ class App extends React.Component {
     const user = this.props.user || {};
     debugger
     const userIconPath =
-      user.photo ? `http://localhost:3038/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : userIcon);
+      user.photo ? `/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : userIcon);
     let chatWidgetOptions = user.role === 'Doctor' ? 
     {
       title: this.state.requestingUser && this.state.requestingUser.name,
       profileAvatar: this.state.requestingUser && 
-          this.state.requestingUser.photo ? `http://localhost:3038/${this.state.requestingUser.email}/${this.state.requestingUser.photo}`: userIconPath
+          this.state.requestingUser.photo ? `/${this.state.requestingUser.email}/${this.state.requestingUser.photo}`: userIconPath
     } : 
     {
       title: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.name,
       profileAvatar: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.photo ? 
-        `http://localhost:3038/${this.props.selectedDoctorForChat.userId.email}/${this.props.selectedDoctorForChat.userId.photo}`
+        `/${this.props.selectedDoctorForChat.userId.email}/${this.props.selectedDoctorForChat.userId.photo}`
         : doctorUserIcon
     }
     

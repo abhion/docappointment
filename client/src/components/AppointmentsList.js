@@ -22,7 +22,7 @@ class AppointmentsList extends React.Component {
     }
 
     deleteAppointment = (appointmentId) => {
-        axios.put(`http://localhost:3038/appointment/${appointmentId}/1`, {
+        axios.put(`/appointment/${appointmentId}/1`, {
             isCancelled: true,
             reason: 'none'
         }, this.reqHeaders)
@@ -42,7 +42,7 @@ class AppointmentsList extends React.Component {
 
     fetchAppointments = () => {
         
-        axios.get(`http://localhost:3038/appointments/${this.props.user._id}`, this.reqHeaders)
+        axios.get(`/appointments/${this.props.user._id}`, this.reqHeaders)
             .then(response => {
                 console.log(response);
                 const upcomingAppointments = [], prevAppointments = [];

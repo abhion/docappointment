@@ -143,7 +143,7 @@ class RegisterComponent extends React.Component {
 
         }
         this.setState({ btnLoading: true })
-        axios.post('http://localhost:3038/user', formData, {
+        axios.post('/user', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

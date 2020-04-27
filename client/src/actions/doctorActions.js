@@ -17,7 +17,7 @@ export const setSelectedDoctor = (payload) => {
 export const startGetDoctorFromId = (id) => {
     
     return (dispatch) => {
-        axios.get(`http://localhost:3038/doctor/${id}`, {
+        axios.get(`/doctor/${id}`, {
             headers: {
                 'x-auth': localStorage.getItem('authToken')
             }

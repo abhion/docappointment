@@ -15,7 +15,7 @@ class LoginForm extends React.Component {
 
     onFinish = (loginData) => {
         this.setState({ btnLoading: true })
-        axios.post('http://localhost:3038/login', loginData)
+        axios.post('/login', loginData)
             .then(response => {
                 if (response.data.message) {
                     this.setState({ btnLoading: false })
@@ -25,7 +25,7 @@ class LoginForm extends React.Component {
                     this.props.dispatch(setLoggedInUser(response.data.user));
                     if (response.data.user.role === 'Doctor') {
                         
-                        io('http://localhost:3038/chat',
+                        io('/chat',
                             {
                                 query:{
                                     action: 'createRoom',

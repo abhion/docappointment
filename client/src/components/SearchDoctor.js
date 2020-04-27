@@ -134,7 +134,7 @@ class SearchDoctor extends React.Component {
         location.coordinates = location.coordinates[1];
         console.log(location.coordinates);
 
-        axios.post(`http://localhost:3038/search/locality`, {
+        axios.post(`/search/locality`, {
             specialization: this.state.selectedSpecialization,
             location: location
         })
@@ -167,7 +167,7 @@ class SearchDoctor extends React.Component {
     fetchDoctorsFromPoint = (location) => {
         const coords = [location.coordinates[1], location.coordinates[0]]
         location.coordinates = coords;
-        axios.post(`http://localhost:3038/search/sublocality`, {
+        axios.post(`/search/sublocality`, {
             specialization: this.state.selectedSpecialization,
             location: location
         })

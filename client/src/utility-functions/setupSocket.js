@@ -18,7 +18,7 @@ export const setEssentialMethods = (showChatRequestPopup, handleRequestAccepted,
 export const setupSocket = (doctorUserId) => {
 
     if (!socket) {
-        socket = io('http://localhost:3038/',
+        socket = io('/',
             {
                 query: {
                     action: 'createRoom',
@@ -49,7 +49,7 @@ export const sendMessage = (mess, doctorUserId) => {
 export const requestChat = (doctorUserId, requestingUser, showRequestSendMessage) => {
     debugger
     if (!socket) {
-        socket = io('http://localhost:3038/')
+        socket = io('/')
         socket.on('connect', () => {
             debugger
             socket && socket.emit('ask-to-join', { doctorUserId, requestingUser, socketId: socket.id })

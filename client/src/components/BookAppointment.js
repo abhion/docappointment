@@ -32,7 +32,7 @@ class BookAppointment extends React.Component {
     }
 
     fetchUpcomingAppointments = () => {
-        axios.get(`http://localhost:3038/appointments/available/${this.props.selectedDoctorForBooking.userId._id}`, this.reqHeaders)
+        axios.get(`/appointments/available/${this.props.selectedDoctorForBooking.userId._id}`, this.reqHeaders)
         .then(response => {
             console.log(response, "Appointemnts");
             const appointments = response.data.map(appointment => {
@@ -163,7 +163,7 @@ class BookAppointment extends React.Component {
 
     createAppointment = () => {
         this.setState({submitLoading: true});
-        axios.post(`http://localhost:3038/appointment`, 
+        axios.post(`/appointment`, 
         {
             date: this.state.selectedAppointmentTime.toISOString(),
             doctorUserId: this.props.selectedDoctorForBooking.userId._id,

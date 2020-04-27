@@ -31,7 +31,7 @@ function AppointmentBox(props) {
             : <Button onClick={() => props.setDoctorToBook(appointment.doctorUserId)} type="primary">Book Again</Button>
 
     }
-        const photo = opposite.photo ? `http://localhost:3038/${opposite.email}/${opposite.photo}` : userIcon;
+        const photo = opposite.photo ? `/${opposite.email}/${opposite.photo}` : userIcon;
     return (
         <div
             title={props.isCancelled ? 'This appointment was cancelled' : ''}

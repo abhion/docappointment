@@ -3,12 +3,12 @@ const setupDB = require('./config/database');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server, { origins: '*:*' });
-const port = 3038;
 const router = require('./config/routes');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 dotenv.config();
+const port = process.env.PORT || 3000;
 
  const transporter = nodemailer.createTransport({
     service: 'gmail',

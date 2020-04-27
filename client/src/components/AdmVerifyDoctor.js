@@ -53,7 +53,7 @@ class AdmVerifyDoctor extends React.Component {
 
     acceptDoctor = (doctor) => {
         
-        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Verified' }, {
+        axios.put(`/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Verified' }, {
             headers: {
                 'x-auth': localStorage.getItem('authToken')
             }
@@ -76,7 +76,7 @@ class AdmVerifyDoctor extends React.Component {
             })
     }
     rejectDoctor = (doctor) => {
-        axios.put(`http://localhost:3038/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Rejected' }, {
+        axios.put(`/doctor/${doctor.userId._id}/1`, { verificationStatus: 'Rejected' }, {
             headers: {
                 'x-auth': localStorage.getItem('authToken')
             }
@@ -101,7 +101,7 @@ class AdmVerifyDoctor extends React.Component {
 
     fetchPendingDoctors = () => {
         
-        axios.get(`http://localhost:3038/doctors/pending`, {
+        axios.get(`/doctors/pending`, {
             headers: {
                 'x-auth': localStorage.getItem('authToken')
             }

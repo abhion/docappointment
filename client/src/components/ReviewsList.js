@@ -52,7 +52,7 @@ class ReviewsList extends React.Component {
     fetchDoctorReviews = () => {
          
         const doctor =  this.props.doctor;
-        axios.get(`http://localhost:3038/reviews/${doctor.userId._id}`)
+        axios.get(`/reviews/${doctor.userId._id}`)
             .then(response => {
                 console.log(response, "Review");
                 
@@ -90,7 +90,7 @@ class ReviewsList extends React.Component {
         const { rating, addFeedbackText } = values;
 
         this.setState({ submitLoading: true })
-        axios.post(`http://localhost:3038/review`, {
+        axios.post(`/review`, {
             doctorUserId: this.doctorUserId,
             patientId: this.props.loggedInUser._id,
             rating,

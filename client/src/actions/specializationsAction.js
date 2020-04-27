@@ -16,7 +16,7 @@ export const setSpecializations = (payload) => {
 
 export const addSpecialization = (payload, message, onAddFinish) => {
     return (dispatch) => {
-        axios.post(`http://localhost:3038/specialization`, payload, {
+        axios.post(`/specialization`, payload, {
             headers: {
                 'x-auth': localStorage.getItem('authToken')
             }
@@ -41,7 +41,7 @@ export const addSpecialization = (payload, message, onAddFinish) => {
 export const startGetSpecializations = () => {
 
     return (dispatch) => {
-        axios.get(`http://localhost:3038/specializations`)
+        axios.get(`/specializations`)
             .then(response => {
                 // console.log(response);
                 dispatch(setSpecializations(response.data))
