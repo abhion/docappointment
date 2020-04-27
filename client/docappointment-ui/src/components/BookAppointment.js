@@ -35,7 +35,11 @@ class BookAppointment extends React.Component {
         axios.get(`http://localhost:3038/appointments/available/${this.props.selectedDoctorForBooking.userId._id}`, this.reqHeaders)
         .then(response => {
             console.log(response, "Appointemnts");
-            const appointments = response.data.map(appointment => moment(appointment.date).local());
+            const appointments = response.data.map(appointment => {
+             const momentDate =  moment(appointment.date).local();
+             momentDate.isCancelled = appointment.cancellationDetails.isCancelled;
+             return momentDate;
+            });
 
             this.setState({
                 selectedDay: 1,
@@ -124,10 +128,10 @@ class BookAppointment extends React.Component {
         const noon = moment(date.format('YYYY-MM-DD') + ' 12:00');
         const evening = moment(date.format('YYYY-MM-DD') + ' 16:00')
         while (timeToPush <= to) {
-
+            debugger
             const isThisTimeBooked = 
                 this.state.bookedAppointments
-                    .find(app => app.isSame(timeToPush)) || timeToPush.isBefore(moment()) ? true : false;
+                    .find(app => !app.isCancelled && app.isSame(timeToPush)) || timeToPush.isBefore(moment()) ? true : false;
 
             const time = moment(timeToPush);
             time.isBooked = isThisTimeBooked;
@@ -136,6 +140,7 @@ class BookAppointment extends React.Component {
                 timeSlots[0].push(time);
             }
             else if (timeToPush >= noon && timeToPush < evening) {
+                debugger
                 timeSlots[1].push(time);
             }
             else {
@@ -196,7 +201,7 @@ class BookAppointment extends React.Component {
         const doctor = this.props.selectedDoctorForBooking;
         const user = doctor && doctor.userId;
         let bookHeader = '';
-        debugger
+        
         if(user){
              bookHeader = (
                 <div>
@@ -252,7 +257,7 @@ class BookAppointment extends React.Component {
                 <div style={{ flexBasis: '80%', display: 'flex', flexWrap: 'wrap' }}>{dayTimeSlots[2]}</div>
             </div>
         ) : '';
-            debugger
+            
         return (
             <div className="book-box">
                 <div className="book-header">

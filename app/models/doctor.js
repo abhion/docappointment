@@ -58,7 +58,6 @@ const doctorSchema = new Schema(
             type: Number,
             required: true
         },
-
         reviews: [
             new Schema({
                 patientId: {
@@ -95,7 +94,6 @@ const doctorSchema = new Schema(
 
     },{toJSON: {getters: true}, toObject: {getters: true}});
     doctorSchema.virtual('avgRating').get(function () {
-        console.log("AV", this.reviews, "EAV");
         if(this.reviews){
             let avgRating = 0;
             avgRating = this.reviews.reduce((acc, review) => {
@@ -117,7 +115,6 @@ doctorSchema.statics.isDoctorVerified = function (userId) {
     const Doctor = this;
     return Doctor.findOne({ userId }, { verificationStatus: 1 })
         .then(status => {
-            console.log(status, "DOCSTATUS");
 
             if (status.verificationStatus === 'Verified') {
                 return Promise.resolve(true);

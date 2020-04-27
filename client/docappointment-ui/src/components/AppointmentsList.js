@@ -41,7 +41,7 @@ class AppointmentsList extends React.Component {
     }
 
     fetchAppointments = () => {
-        debugger
+        
         axios.get(`http://localhost:3038/appointments/${this.props.user._id}`, this.reqHeaders)
             .then(response => {
                 console.log(response);
@@ -60,7 +60,7 @@ class AppointmentsList extends React.Component {
     }
 
     setDoctorToBook = (doctor) => {
-        debugger
+        
         this.props.dispatch(startGetDoctorFromId(doctor._id));
         this.setState({
             bookAppointmentDrawerVisible: true

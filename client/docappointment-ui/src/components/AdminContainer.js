@@ -17,7 +17,7 @@ class AdminContainer extends React.Component {
 
             path = localStorage.getItem('current_path') || '/admin/doctors/verify';
         }
-        debugger
+        
         return (
             <Layout>
                 <Sider>

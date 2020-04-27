@@ -28,7 +28,7 @@ class ReviewsList extends React.Component {
     componentDidMount() {
         
         const doctorUserId = this.props.match.params.doctorUserId;
-        debugger
+        
         
         if (!Object.keys(this.props.doctor).length) {
 
@@ -41,7 +41,7 @@ class ReviewsList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        debugger
+        
         if (
             (!prevProps.doctor.userId)) {
             this.fetchDoctorReviews();
@@ -50,12 +50,12 @@ class ReviewsList extends React.Component {
     }
 
     fetchDoctorReviews = () => {
-         debugger
+         
         const doctor =  this.props.doctor;
         axios.get(`http://localhost:3038/reviews/${doctor.userId._id}`)
             .then(response => {
                 console.log(response, "Review");
-                debugger
+                
                 let loggedInUserReview = {}, feedbackAlreadyGiven = false;
                 const reviews = response.data.reviews.filter(review => {
                     if (review.patientId._id === this.props.loggedInUser._id) {

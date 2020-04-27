@@ -47,6 +47,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    chatStatus: {
+        type: String,
+        enum: ['Online', 'Offline', 'Busy']
+    },
 
     role: {
         type: String,
@@ -78,6 +82,7 @@ userSchema.methods.generateToken = function () {
     const token = signJwt(tokenData, fs.readFileSync(path.resolve(__dirname, '../security/private.pem'), 'utf-8'));
     if (token) {
         user.tokens.push({ token });
+            user.chatStatus = 'Online';
         return user.save()
             .then(savedUser => {
                 return Promise.resolve(token);

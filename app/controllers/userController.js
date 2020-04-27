@@ -7,8 +7,8 @@ module.exports.createUser = (req, res) => {
     const reqBody = req.body;
     const { name, email, phone, dob, photo, role, password } = reqBody;
     let docObj = {};
-    if(reqBody.role !== 'Doctor' && reqBody.role !== 'Patient'){
-        res.json({errMessage: 'Invalid user role'});
+    if (reqBody.role !== 'Doctor' && reqBody.role !== 'Patient') {
+        res.json({ errMessage: 'Invalid user role' });
     }
     if (reqBody.role === 'Doctor') {
         let {
@@ -53,14 +53,14 @@ module.exports.login = (req, res) => {
     User.findOne({ email })
         .then(user => {
             if (!user) {
-                res.json({errMessage: "No user with that email"});
+                res.json({ errMessage: "No user with that email" });
             }
             else {
                 if (user.role === 'Doctor') {
                     Doctor.isDoctorVerified(user._id).then()
                         .catch(err => {
                             console.log(err);
-                            
+
                             if (err === false) {
                                 res.json({ errMessage: 'Doctor is not verified yet. Cannot login' });
                             }
@@ -72,9 +72,9 @@ module.exports.login = (req, res) => {
                 user.verifyCredentials(password)
                     .then(result => {
                         if (result) {
+
                             user.generateToken()
                                 .then(token => {
-                                    console.log(token);
                                     res.header("Access-Control-Expose-Headers", 'x-auth');
                                     res.setHeader('x-auth', token)
                                     res.json(
@@ -87,14 +87,14 @@ module.exports.login = (req, res) => {
                                                 role: user.role,
                                                 dob: user.dob,
                                                 _id: user._id
-                                            }, 
+                                            },
                                             message: 'Logging in..'
                                         })
                                 })
                                 .catch(err => res.json(err));
                         }
                         else {
-                            res.json({errMessage: "Invalid email/password"});
+                            res.json({ errMessage: "Invalid email/password" });
                         }
                     })
                     ;
@@ -104,7 +104,13 @@ module.exports.login = (req, res) => {
 
 module.exports.logout = (req, res) => {
     const user = req.user;
-    User.findOneAndUpdate(user._id, { $pull: { tokens: { token: req.header('x-auth') } } }, { new: true })
+    User.findByIdAndUpdate(user._id, {
+        chatStatus: 'Offline',
+        $pull: {
+            tokens:
+                { token: req.header('x-auth') }
+        }
+    }, { new: true })
         .then(user => {
             res.json(user)
         })
@@ -119,7 +125,7 @@ module.exports.listUsers = (req, res) => {
 
 module.exports.getLoggedInUser = (req, res) => {
 
-    User.findOne({_id: req.user._id}, { name: 1, email: 1, phone: 1, dob: 1, role: 1, photo: 1 })
+    User.findOne({ _id: req.user._id }, { name: 1, email: 1, phone: 1, dob: 1, role: 1, photo: 1 })
         .then(user => user ? res.json(user) : res.json({}))
         .catch(err => res.json(err))
 }

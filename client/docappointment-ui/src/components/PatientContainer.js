@@ -11,15 +11,15 @@ const { Sider, Content } = Layout;
 class PatientContainer extends React.Component {
     render() {
 
+        
         let path = '';
         if (this.props.history.location.pathname === '/patient' || this.props.history.location.pathname === '/patient/') {
 
             path = localStorage.getItem('current_path') || '/patient/search';
         }
         else{
-            path = this.props.history.location.pathname;
+            // path = this.props.history.location.pathname;
         }
-        debugger
         return (
             <div className="content-container">
                 <Layout>

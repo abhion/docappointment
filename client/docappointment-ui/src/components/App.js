@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Drawer, Dropdown } from 'antd';
+import { Layout, Menu, Drawer, Dropdown, Modal, message, Button } from 'antd';
 import Landing from './Landing';
 import { Link, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -14,18 +14,32 @@ import doctorUserIcon from '../images/doctor-user.png';
 import AdminContainer from './AdminContainer';
 import DoctorContainer from './DoctorContainer';
 import PatientContainer from './PatientContainer';
-
 import axios from 'axios';
-
+import { Widget, toggleWidget, addResponseMessage, renderCustomComponent, setBadgeCount } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
+import { setupSocket, acceptRejectChatRequest, setEssentialMethods, sendMessage, leaveChat } from '../utility-functions/setupSocket';
+import { setChatDoctor } from '../actions/doctorActions';
 
 const { Header, Content } = Layout;
 
+class Leave extends React.Component{
+
+  render(){
+    return <Button 
+    onClick={leaveChat}
+    style={{position: 'absolute', top: 0, right: 0}}>Leave</Button>
+  }
+}
 
 class App extends React.Component {
 
   state = {
     loginDrawerVisible: false,
-    registerDrawerVisible: false
+    registerDrawerVisible: false,
+    chatRequestPopupVisible: false,
+    socketId: '',
+    requestingUser: '',
+    chatWidgetVisible: false
   }
   unlisten = null;
 
@@ -35,9 +49,61 @@ class App extends React.Component {
     }
   }
 
+  showChatRequestPopup = (data) => {
+    debugger
+    
+    this.setState({
+      chatRequestPopupVisible: true,
+      socketId: data.socketId,
+      requestingUser: data.requestingUser
+    })
+  }
 
+  handleRequestAccepted = () => {
+    console.log("req acc");
+    message.info('Doctor has accepted');
+    this.setState({chatWidgetVisible: true}, () => {toggleWidget();
+      setBadgeCount(0);})
+    
+    
+  }
+
+  handleRequestRejected = () => {
+    console.log("req rej");
+    // message.info('The doctor could not connect at this moment')
+  }
+
+  handleLeaveChat = () => {
+    this.setState({
+      chatWidgetVisible: false
+    })
+    
+  }
+
+  handleOppositeUserLeftChat = () => {
+    debugger
+    message.info('The other user has left the chat');
+    const doctorUserId = this.props.user.role === 'Doctor' ? this.props.user._id : this.props.selectedDoctorForChat.userId._id;
+    leaveChat(doctorUserId);
+    // this.props.dispatch(setChatDoctor({}));
+    // this.handleLeaveChat();
+  }
+
+  componentDidUpdate(prev) {
+    if (!prev.user._id || prev.user._id !== this.props.user._id) {
+      if (this.props.user.role === 'Doctor'){
+        setupSocket(this.props.user._id, this.showChatRequestPopup, this.handleRequestAccepted,
+          this.handleRequestRejected);
+      }
+      setEssentialMethods(this.showChatRequestPopup, this.handleRequestAccepted, 
+        this.handleRequestRejected, this.onMessageReceived, this.handleLeaveChat, this.handleOppositeUserLeftChat, this.props.user)
+    }
+    renderCustomComponent(Leave)
+  }
 
   componentDidMount() {
+
+    
 
     if (localStorage.getItem('authToken') && !this.props.isLoggedIn) {
       this.props.dispatch(setLoggedInTrue());
@@ -54,9 +120,9 @@ class App extends React.Component {
         this.props.history.push('/');
       }
       if (this.props.history.location.pathname !== '/'
-      && this.props.history.location.pathname !== '/admin'
-      && this.props.history.location.pathname !== '/patient'
-      && this.props.history.location.pathname !== '/doctor'
+        && this.props.history.location.pathname !== '/admin'
+        && this.props.history.location.pathname !== '/patient'
+        && this.props.history.location.pathname !== '/doctor'
       ) {
 
         localStorage.setItem('current_path', this.props.history.location.pathname || '');
@@ -74,6 +140,16 @@ class App extends React.Component {
 
   logout = () => {
 
+    const selectedDoctorForChat = this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id;
+        if(selectedDoctorForChat){
+          leaveChat(this.props.selectedDoctorForChat.userId);
+        }
+        else{
+          if(this.props.user.role === 'Doctor'){
+            leaveChat(this.props.user && this.props.user._id);
+          }
+        }
+
     axios.delete(`http://localhost:3038/logout`, {
       headers: {
         'x-auth': localStorage.getItem('authToken')
@@ -84,6 +160,7 @@ class App extends React.Component {
         this.props.dispatch(setLoggedInFalse());
         this.props.dispatch(setLoggedInUser({}));
         this.props.history.push('/');
+        
       })
       .catch(err => {
         console.log(err.response)
@@ -94,10 +171,45 @@ class App extends React.Component {
 
   }
 
+  handleNewUserMessage = (newMessage) => {
+    debugger
+    console.log(this.props.selectedDoctorForChat);
+    if(this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id){
+      sendMessage(newMessage, this.props.selectedDoctorForChat.userId._id);
+    }
+    else{
+      if(this.props.user.role === 'Doctor'){
+        sendMessage(newMessage, this.props.user._id);
+      }
+    }
+    
+  }
+
+
+
+  onMessageReceived = message => {
+    console.log("Addres");
+    addResponseMessage(message);
+  }
+
   render() {
     const user = this.props.user || {};
+    debugger
     const userIconPath =
       user.photo ? `http://localhost:3038/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : userIcon);
+    let chatWidgetOptions = user.role === 'Doctor' ? 
+    {
+      title: this.state.requestingUser && this.state.requestingUser.name,
+      profileAvatar: this.state.requestingUser && 
+          this.state.requestingUser.photo ? `http://localhost:3038/${this.state.requestingUser.email}/${this.state.requestingUser.photo}`: userIconPath
+    } : 
+    {
+      title: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.name,
+      profileAvatar: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.photo ? 
+        `http://localhost:3038/${this.props.selectedDoctorForChat.userId.email}/${this.props.selectedDoctorForChat.userId.photo}`
+        : doctorUserIcon
+    }
+    
 
     const dropdownMenu = (
       <Menu>
@@ -135,7 +247,7 @@ class App extends React.Component {
       )
     let content = '', redirecTo = '';
     if (this.props.user.role) {
-      debugger
+
       if (this.props.user.role === 'Doctor') {
         content = <Route path="/doctor" component={DoctorContainer} />
         if (this.props.history.location.pathname === '/' || this.props.history.location.pathname.split('/')[1] !== 'doctor') {
@@ -155,6 +267,7 @@ class App extends React.Component {
         }
       }
     }
+
 
     return (
       <div className="App">
@@ -204,6 +317,35 @@ class App extends React.Component {
               openLoginDrawer={() => this.setState({ loginDrawerVisible: true })} />
           }
         </Drawer>
+
+        {this.state.chatWidgetVisible &&
+
+          <Widget
+            style={{position: 'relative'}}
+            subtitle=""
+            renderCustom
+            {...chatWidgetOptions}
+            handleNewUserMessage={this.handleNewUserMessage}
+          />
+        }
+
+        <Modal
+          title="Chat request"
+          visible={this.state.chatRequestPopupVisible}
+          onOk={() => {
+            debugger
+            acceptRejectChatRequest('accept-request', this.state.socketId, this.props.user._id);
+            this.setState({ chatRequestPopupVisible: false, chatWidgetVisible: true })
+          }}
+          onCancel={() => {
+            acceptRejectChatRequest('reject-request', this.state.socketId, this.props.user._id);
+            this.setState({ chatRequestPopupVisible: false })
+          }
+
+          }
+        >
+          {/* A patient ({this.state.requestingUser.name}) wants to chat with you. Confirm? */}
+        </Modal>
       </div>
     );
   }
@@ -212,9 +354,13 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state);
+
   return {
     user: state.user,
-    isLoggedIn: state.isLoggedIn
+    isLoggedIn: state.isLoggedIn,
+    chatWidgetStatus: state.chatWidgetStatus,
+    selectedDoctorForChat: state.selectedDoctorForChat
   }
 }
 

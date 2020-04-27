@@ -15,14 +15,15 @@ class DoctorSearchList extends React.Component {
     // }
 
     handleDoctorSelected = (selectedDoctor) => {
-        debugger
+        
         this.props.dispatch(setSelectedDoctor(selectedDoctor));
     }
 
     render() {
-        // console.log(this.props);
-        if(!this.props.location.data){
-          return  <Redirect to="/patient/search" />
+        debugger
+        console.log(this.props);
+        if(!this.props.location.state){
+          return  <>loading</>
         }
         const data = this.props.location.state.data;
         const text = this.props.location.state.text;

@@ -123,14 +123,16 @@ class SearchDoctor extends React.Component {
 
     fetchDoctorsFromPolygon = (location) => {
         const lngLatCoords = [];
+        debugger
+        // if (location.type === 'Polygon') {
+        //     location.coordinates[1].forEach(coord => {
+        //         debugger
+        //         lngLatCoords.push([coord[1], coord[0]])
+        //     });
+        // }
 
-        if (location.type === 'Polygon') {
-            location.coordinates[1].forEach(coord => {
-                lngLatCoords.push([coord[1], coord[0]])
-            });
-        }
-
-        location.coordinates = lngLatCoords;
+        location.coordinates = location.coordinates[1];
+        console.log(location.coordinates);
 
         axios.post(`http://localhost:3038/search/locality`, {
             specialization: this.state.selectedSpecialization,
@@ -177,6 +179,7 @@ class SearchDoctor extends React.Component {
                     message.info('Could not find doctors at that location. Change the search text and try again');
                     this.setState({loadSpinner: false})
                 } else {
+                    debugger
                     this.props.history.push({
                         pathname: '/patient/search/results',
                         state: {

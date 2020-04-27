@@ -15,7 +15,7 @@ export const setSelectedDoctor = (payload) => {
 }
 
 export const startGetDoctorFromId = (id) => {
-    debugger
+    
     return (dispatch) => {
         axios.get(`http://localhost:3038/doctor/${id}`, {
             headers: {
@@ -29,5 +29,13 @@ export const startGetDoctorFromId = (id) => {
             })
             .catch(err => console.log(err))
 
+    }
+}
+
+export const setChatDoctor = (payload) => {
+    debugger
+    return {
+        type: 'SET_CHAT_DOCTOR',
+        payload
     }
 }
