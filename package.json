@@ -5,25 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "install": "cd client && npm run build",
+    "install": "cd client && cd docappointment-ui && npm run build",
     "heroku-prebuild": "npm install",
-    "heroku-postbuild": "rm -rf node_modules && cd client && rm -rf node_modules && npm install && npm run build",
+    "heroku-postbuild": "cd client && rm -rf node_modules && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": "^10.3.0", 
     "npm": "^6.8.0" 
 },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/abhion/docappointment.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/abhion/docappointment/issues"
-  },
-  "homepage": "https://github.com/abhion/docappointment#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
