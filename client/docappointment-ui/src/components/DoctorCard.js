@@ -21,7 +21,7 @@ function DoctorCard(props) {
 
     const doctor = props.doctor;
     const user = doctor.userId;
-    const pic = user.photo ? `/${user.email}/${user.photo}` : doctorUserIcon;
+    const pic = user.photo ? `/userfiles/${user.email}/${user.photo}` : doctorUserIcon;
     const experience = moment().diff(moment(doctor.practiseStartDate), 'years');
     const hospital = doctor.practisingAt;
     const daysAvailable = doctor.daysAvailable.map(day => <span key={day} className="days-available">{day.slice(0, 3)}</span>);
