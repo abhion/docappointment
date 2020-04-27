@@ -22,11 +22,11 @@ const path = require('path')
 
 
 module.exports = transporter;
-
+console.log();
 app.use(cors());
-app.use(express.static(path.join(__dirname,"client/build"))) 
+app.use(express.static(path.join(__dirname,"/client/docappointment-ui/build"))) 
 app.get("*",(req,res) => { 
-    res.sendFile(path.join(__dirname + "/client/build/index.html")) 
+    res.sendFile(path.join(__dirname + "/client/docappointment-ui/build/index.html")) 
 }) 
 console.log(__dirname, "__dirname");
 app.use(express.static(__dirname + `/userfiles`))
