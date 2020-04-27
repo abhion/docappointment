@@ -12,7 +12,7 @@
   "engines": {
     "node": "^10.3.0", 
     "npm": "^6.8.0" 
-},
+  },
   "dependencies": {
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
@@ -29,3 +29,5 @@
     "validator": "^13.0.0"
   }
 }
+
+// "install": "cd client/docappointment-ui && npm run build",
