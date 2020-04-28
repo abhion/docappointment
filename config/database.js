@@ -8,3 +8,5 @@ const setupDB = () => {
 }
 
 module.exports = setupDB; 
+// mongoose.connect('mongodb://localhost:27017/book-a-doc')
+//mongodb+srv://dbUser:AsimplePasswordMate@cluster0-spmyi.gcp.mongodb.net/test?retryWrites=true/book-adoc

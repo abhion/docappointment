@@ -82,7 +82,7 @@ class App extends React.Component {
 
   handleOppositeUserLeftChat = () => {
     debugger
-    message.info('The other user has left the chat');
+    // message.info('The other user has left the chat');
     const doctorUserId = this.props.user.role === 'Doctor' ? this.props.user._id : this.props.selectedDoctorForChat.userId._id;
     leaveChat(doctorUserId);
     // this.props.dispatch(setChatDoctor({}));

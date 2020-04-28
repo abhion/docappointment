@@ -27,11 +27,11 @@ app.use(cors());
 app.use(express.json());
 app.use('/', router);   
 app.use(express.static(path.join(__dirname,"/client/docappointment-ui/build"))) 
-app.get("*",(req,res) => { 
-    res.sendFile(path.join(__dirname + "/client/docappointment-ui/build/index.html")) 
-}) 
 console.log(__dirname, "__dirname");
-app.use('userfiles', express.static(__dirname + `/userfiles`))
+app.use('/userfiles', express.static(__dirname + `/userfiles`))
+        app.get("*",(req,res) => { 
+            res.sendFile(path.join(__dirname + "/client/docappointment-ui/build/index.html")) 
+        }) 
 
 io.on('connection', (socket) => {
     const socketQuery = socket.handshake.query;
