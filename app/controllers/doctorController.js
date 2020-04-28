@@ -12,9 +12,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-console.log("====================", process.env.GMAIL_USERNAME, "===========---------=========");
-console.log("====================", process.env.PASS, "=-------------------");
-
 module.exports.getDoctors = (req, res) => {
     Doctor.find().populate('userId').populate('specialization')
         .then(doctors => res.json(doctors))
@@ -32,7 +29,7 @@ module.exports.getDoctorById = (req, res) => {
 module.exports.getPendingStatusDoctors = (req, res) => {
     Doctor.find({ verificationStatus: 'Pending' })
         .populate('specialization', 'name')
-        .populate('userId', 'name _id photo')
+        .populate('userId', 'name _id photo email')
         .then(doctors => doctors ? res.json(doctors) : res.json([]))
         .catch(err => res.json(err));
 

@@ -3,6 +3,7 @@ import axios from '../utility-functions/axiosConfig';
 import { Table, Popconfirm, message } from 'antd';
 import { connect } from 'react-redux';
 import { setLoggedInFalse } from '../actions/usersAction';
+import doctorUserIcon from '../images/doctor-user.png';
 
 class AdmVerifyDoctor extends React.Component {
     state = {
@@ -16,6 +17,14 @@ class AdmVerifyDoctor extends React.Component {
     }
 
     tableColumns = [
+        {
+            title: 'Photo',
+            key:"0",
+            render: (record) => {
+              const photo = record.userId.photo ? `/userfiles/${record.userId.email}/${record.userId.photo}` : doctorUserIcon;
+              return <img src={photo} key="photo" />
+            }
+        },
         {
             title: 'Name',
             render: (record) => <>{record.userId.name}</>,
@@ -32,8 +41,19 @@ class AdmVerifyDoctor extends React.Component {
             dataIndex: 'schoolOfMedicine'
         },
         {
+            title: 'Documents',
+            key: '4',
+            render: (record) => {
+                debugger
+                return record.documents[0].split(',').map(document => {
+                    debugger
+                  return  <a key="document" target="_blank" href={`/userfiles/${record.userId.email}/${document}`}>{document + ' '}</a>
+                })
+            }
+        },
+        {
             title: 'Action',
-            key: "4",
+            key: "5",
             render: (text, record) => {
                 return <>
                     <Popconfirm title="Are you sure"
