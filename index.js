@@ -7,22 +7,14 @@ const router = require('./config/routes');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const nodecron = require('node-cron');
+const sendMailThroughCron = require('./config/setupnodecron');
 dotenv.config();
 const port = process.env.PORT || 3000;
-const path = require('path') 
+const path = require('path');
 
+nodecron.schedule('39 19 * * *', () => sendMailThroughCron());
 
- const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAIL_USERNAME,
-        pass: process.env.PASS
-    }
-});
-
-
-module.exports = transporter;
-console.log();
 app.use(cors());
 app.use(express.json());
 app.use('/', router);   

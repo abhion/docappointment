@@ -3,6 +3,7 @@ const Doctor = require('../models/doctor');
 const Appointment = require('../models/appointment');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const moment = require('moment');
 dotenv.config();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -25,6 +26,7 @@ module.exports.getDoctorById = (req, res) => {
         .then(doctor => res.json(doctor))
         .catch(err => res.json(err));
 }
+
 
 module.exports.getPendingStatusDoctors = (req, res) => {
     Doctor.find({ verificationStatus: 'Pending' })
@@ -49,7 +51,7 @@ module.exports.searchDoctorsInSubLocality = (req, res) => {
             specialization
         },
 
-    ).populate('userId')
+    ).populate({path: 'userId', select: '-password -tokens'})
         .then(doctors => {
             res.json(doctors);
         })
@@ -72,7 +74,7 @@ module.exports.searchDoctorsInLocality = (req, res) => {
             specialization
         }
 
-    ).populate('userId')
+    ).populate({path: 'userId', select: '-password'})
         .then(doctors => {
             res.json(doctors);
         })
@@ -91,11 +93,11 @@ module.exports.verifyDoctor = (req, res) => {
     const { id } = req.params;
     const { verificationStatus = 'Pending' } = req.body;
     Doctor.findOneAndUpdate({ userId: id }, { verificationStatus }, { new: true }).populate({ path: 'userId', select: 'email' })
-    .then(doctor => {
-        // console.log(doctor);
-        // console.log(doctor, " THS");
-        
-        const doctorEmail = doctor.userId.email;
+        .then(doctor => {
+            // console.log(doctor);
+            // console.log(doctor, " THS");
+
+            const doctorEmail = doctor.userId.email;
             const message = verificationStatus === 'Verified' ? `<div>
             Hi,
             We have reviewed the details you submitted and are pleased to inform that you can now start using BookADoc. You will now appear in
