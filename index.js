@@ -13,7 +13,7 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 const path = require('path');
 
-nodecron.schedule('45 19 * * *', () => sendMailThroughCron());
+nodecron.schedule('55 19 * * *', () => sendMailThroughCron());
 
 app.use(cors());
 app.use(express.json());
