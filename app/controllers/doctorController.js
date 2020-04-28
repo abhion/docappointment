@@ -12,6 +12,9 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+console.log("====================", process.env.GMAIL_USERNAME, "===========---------=========");
+console.log("====================", process.env.PASS, "=-------------------");
+
 module.exports.getDoctors = (req, res) => {
     Doctor.find().populate('userId').populate('specialization')
         .then(doctors => res.json(doctors))
