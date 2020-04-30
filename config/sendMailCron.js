@@ -67,12 +67,12 @@ module.exports = sendMailThroughCron = () => {
         })
         Promise.all(htmlPromises)
             .then(mailOptions => {
+                mailOptions = mailOptions.filter(mailOptionsObj => mailOptionsObj);
                 mailOptions.forEach(mailOptionsObj => {
                     transporter.sendMail(mailOptionsObj, function (err, info) {
                         console.log(err, info);
                     })
                 })
-                res.json(results.filter(result => result))
             })
             .catch(err => console.log(err))
     })

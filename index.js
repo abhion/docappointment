@@ -8,12 +8,14 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const nodecron = require('node-cron');
-const sendMailThroughCron = require('./config/setupnodecron');
+const sendMailThroughCron = require('./config/sendMailCron');
+const sendMessageToPatients = require('./config/sendMessageCron');
 dotenv.config();
 const port = process.env.PORT || 3000;
 const path = require('path');
 
-nodecron.schedule('55 19 * * *', () => sendMailThroughCron());
+nodecron.schedule('4 13 * * *', () => sendMailThroughCron());
+nodecron.schedule('5 13 * * *', () => sendMessageToPatients());
 
 app.use(cors());
 app.use(express.json());
