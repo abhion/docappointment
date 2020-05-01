@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports.getDoctors = (req, res) => {
-    Doctor.find().populate('userId').populate('specialization')
+    Doctor.find().populate({path: 'userId', select: '-password -tokens'}).populate('specialization')
         .then(doctors => res.json(doctors))
         .catch(err => res.json(err))
 }
@@ -22,7 +22,7 @@ module.exports.getDoctors = (req, res) => {
 
 module.exports.getDoctorById = (req, res) => {
     const doctorUserId = req.params.doctorUserId;
-    Doctor.find({ userId: doctorUserId }).populate('userId')
+    Doctor.find({ userId: doctorUserId }).populate({path: 'userId', select: '-password -tokens'})
         .then(doctor => res.json(doctor))
         .catch(err => res.json(err));
 }
@@ -74,7 +74,7 @@ module.exports.searchDoctorsInLocality = (req, res) => {
             specialization
         }
 
-    ).populate({path: 'userId', select: '-password'})
+    ).populate({path: 'userId', select: '-password, -tokens'})
         .then(doctors => {
             res.json(doctors);
         })

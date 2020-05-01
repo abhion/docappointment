@@ -36,8 +36,8 @@ module.exports.cancelAppointment = (req, res) => {
 module.exports.getAppointments = (req, res) => {
     const userId = req.params.userId;
     Appointment.find({ $or: [{ patientId: userId }, { doctorUserId: userId }] })
-        .populate('doctorUserId')
-        .populate('patientId')
+        .populate({path: 'doctorUserId', select: '-password -tokens'})
+        .populate({path: 'patientId', select: '-password -tokens'})
         .then(appointments => appointments.length ? res.json(appointments) : res.json([]))
         .catch(err => res.json(err))
 }
