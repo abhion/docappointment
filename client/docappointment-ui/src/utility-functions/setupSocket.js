@@ -48,7 +48,7 @@ export const sendMessage = (mess, doctorUserId) => {
 
 export const requestChat = (doctorUserId, requestingUser, showRequestSendMessage) => {
     debugger
-    if (!socket) {
+    if (!socket || !socket.connected) {
         socket = io('/')
         socket.on('connect', () => {
             debugger
@@ -77,9 +77,9 @@ export const requestChat = (doctorUserId, requestingUser, showRequestSendMessage
 
 }
 
-export const leaveChat = (doctorUserId) => {
+export const leaveChat = (doctorUserId, isDoctor) => {
     debugger
-    socket && socket.emit('leave_room', { doctorUserId });
+    socket && socket.emit('leave_room', { doctorUserId, isDoctor });
     essentialMethods.handleLeaveChat();
 }
 

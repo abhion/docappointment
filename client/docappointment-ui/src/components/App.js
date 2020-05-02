@@ -22,14 +22,25 @@ import { setChatDoctor } from '../actions/doctorActions';
 
 const { Header, Content } = Layout;
 
-class Leave extends React.Component{
+class Leave extends React.Component {
 
-  render(){
-    return <Button 
-    onClick={leaveChat}
-    style={{position: 'absolute', top: 0, right: 0}}>Leave</Button>
+  render() {
+    return <Button
+      onClick={() =>{
+        debugger
+       leaveChat(
+        (this.props.selectedDoctorForChat && this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id) || (this.props.user._id),
+        this.props.user.role === 'Doctor' ? true : false)
+      }}
+      style={{ position: 'absolute', top: 0, right: 0 }}>Leave</Button>
   }
 }
+
+const LeaveChatComponent = connect((state) => (
+  {
+    selectedDoctorForChat: state.selectedDoctorForChat,
+    user: state.user
+  }))(Leave)
 
 class App extends React.Component {
 
@@ -51,7 +62,7 @@ class App extends React.Component {
 
   showChatRequestPopup = (data) => {
     debugger
-    
+
     this.setState({
       chatRequestPopupVisible: true,
       socketId: data.socketId,
@@ -62,10 +73,12 @@ class App extends React.Component {
   handleRequestAccepted = () => {
     console.log("req acc");
     message.info('Doctor has accepted');
-    this.setState({chatWidgetVisible: true}, () => {toggleWidget();
-      setBadgeCount(0);})
-    
-    
+    this.setState({ chatWidgetVisible: true }, () => {
+      toggleWidget();
+      setBadgeCount(0);
+    })
+
+
   }
 
   handleRequestRejected = () => {
@@ -77,33 +90,37 @@ class App extends React.Component {
     this.setState({
       chatWidgetVisible: false
     })
-    
+
   }
 
   handleOppositeUserLeftChat = () => {
     debugger
-    // message.info('The other user has left the chat');
+    message.info('The other user has left the chat');
     const doctorUserId = this.props.user.role === 'Doctor' ? this.props.user._id : this.props.selectedDoctorForChat.userId._id;
-    leaveChat(doctorUserId);
+    if (this.props.user.role !== 'Doctor') {
+      leaveChat(doctorUserId);
+    }else{
+      this.setState({chatWidgetVisible: false})
+    }
     // this.props.dispatch(setChatDoctor({}));
     // this.handleLeaveChat();
   }
 
   componentDidUpdate(prev) {
     if (!prev.user._id || prev.user._id !== this.props.user._id) {
-      if (this.props.user.role === 'Doctor'){
+      if (this.props.user.role === 'Doctor') {
         setupSocket(this.props.user._id, this.showChatRequestPopup, this.handleRequestAccepted,
           this.handleRequestRejected);
       }
-      setEssentialMethods(this.showChatRequestPopup, this.handleRequestAccepted, 
+      setEssentialMethods(this.showChatRequestPopup, this.handleRequestAccepted,
         this.handleRequestRejected, this.onMessageReceived, this.handleLeaveChat, this.handleOppositeUserLeftChat, this.props.user)
     }
-    renderCustomComponent(Leave)
+    renderCustomComponent(LeaveChatComponent)
   }
 
   componentDidMount() {
 
-    
+
 
     if (localStorage.getItem('authToken') && !this.props.isLoggedIn) {
       this.props.dispatch(setLoggedInTrue());
@@ -141,14 +158,14 @@ class App extends React.Component {
   logout = () => {
 
     const selectedDoctorForChat = this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id;
-        if(selectedDoctorForChat){
-          leaveChat(this.props.selectedDoctorForChat.userId);
-        }
-        else{
-          if(this.props.user.role === 'Doctor'){
-            leaveChat(this.props.user && this.props.user._id);
-          }
-        }
+    if (selectedDoctorForChat) {
+      leaveChat(this.props.selectedDoctorForChat.userId._id);
+    }
+    else {
+      if (this.props.user.role === 'Doctor') {
+        leaveChat(this.props.user && this.props.user._id, this.props.user.role === 'Doctor' ? true : false);
+      }
+    }
 
     axios.delete(`/logout`, {
       headers: {
@@ -160,7 +177,7 @@ class App extends React.Component {
         this.props.dispatch(setLoggedInFalse());
         this.props.dispatch(setLoggedInUser({}));
         this.props.history.push('/');
-        
+
       })
       .catch(err => {
         console.log(err.response)
@@ -174,15 +191,15 @@ class App extends React.Component {
   handleNewUserMessage = (newMessage) => {
     debugger
     console.log(this.props.selectedDoctorForChat);
-    if(this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id){
+    if (this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId._id) {
       sendMessage(newMessage, this.props.selectedDoctorForChat.userId._id);
     }
-    else{
-      if(this.props.user.role === 'Doctor'){
+    else {
+      if (this.props.user.role === 'Doctor') {
         sendMessage(newMessage, this.props.user._id);
       }
     }
-    
+
   }
 
 
@@ -197,19 +214,19 @@ class App extends React.Component {
     debugger
     const userIconPath =
       user.photo ? `/userfiles/${user.email}/${user.photo}` : (user.role === 'Doctor' ? doctorUserIcon : userIcon);
-    let chatWidgetOptions = user.role === 'Doctor' ? 
-    {
-      title: this.state.requestingUser && this.state.requestingUser.name,
-      profileAvatar: this.state.requestingUser && 
-          this.state.requestingUser.photo ? `/userfiles/${this.state.requestingUser.email}/${this.state.requestingUser.photo}`: userIconPath
-    } : 
-    {
-      title: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.name,
-      profileAvatar: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.photo ? 
-        `/userfiles/${this.props.selectedDoctorForChat.userId.email}/${this.props.selectedDoctorForChat.userId.photo}`
-        : doctorUserIcon
-    }
-    
+    let chatWidgetOptions = user.role === 'Doctor' ?
+      {
+        title: this.state.requestingUser && this.state.requestingUser.name,
+        profileAvatar: this.state.requestingUser &&
+          this.state.requestingUser.photo ? `/userfiles/${this.state.requestingUser.email}/${this.state.requestingUser.photo}` : userIconPath
+      } :
+      {
+        title: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.name,
+        profileAvatar: this.props.selectedDoctorForChat.userId && this.props.selectedDoctorForChat.userId.photo ?
+          `/userfiles/${this.props.selectedDoctorForChat.userId.email}/${this.props.selectedDoctorForChat.userId.photo}`
+          : doctorUserIcon
+      }
+
 
     const dropdownMenu = (
       <Menu>
@@ -321,7 +338,7 @@ class App extends React.Component {
         {this.state.chatWidgetVisible &&
 
           <Widget
-            style={{position: 'relative'}}
+            style={{ position: 'relative' }}
             subtitle=""
             renderCustom
             {...chatWidgetOptions}

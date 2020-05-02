@@ -33,8 +33,10 @@ io.on('connection', (socket) => {
         socket.join(socketQuery.doctorUserId);
     }
     socket.on('leave_room', (data) => {
-        io.to(data.doctorUserId).emit('left-chat');
-        socket.leaveAll();
+        if(!data.isDoctor){
+            socket.disconnect();
+        }
+        socket.to(data.doctorUserId).emit('left-chat');
     });
     
     socket.on('ask-to-join', (data) => {
