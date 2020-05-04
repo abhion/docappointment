@@ -23,7 +23,15 @@ class BookAppointment extends React.Component {
         selectedAppointmentTime: ''
     }
 
+    componentDidMount(){
+        console.log(this.props.selectedDoctorForBooking);
+        if(Object.keys(this.props.selectedDoctorForBooking).length){
+            this.fetchUpcomingAppointments();
+        }
+    }
+
     componentDidUpdate(prevProps) {
+        debugger
         if (!prevProps.selectedDoctorForBooking.userId || 
             (prevProps.selectedDoctorForBooking.userId._id !== this.props.selectedDoctorForBooking.userId._id)) {
             this.setState({ loadSpinner: true });
