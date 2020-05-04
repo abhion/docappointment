@@ -3,8 +3,8 @@ const Appointment = require('../app/models/appointment');
 const today = moment().startOf('day').toISOString();
 const todayEnd = moment().endOf('day').toISOString();
 const twilio = require('twilio');
-const accountSid = 'ACb2cbea51348009e67d47dea3a7928040';
-const authToken = '65435e187b43c5871a9e6d882c41ea0a';
+const accountSid = 'ACb2cbea51348009e67d47dea3a7928040'; //changed now
+const authToken = '65435e187b43c5871a9e6d882c41ea0a';  //changed now
 const client = require('twilio')(accountSid, authToken);
 
 const sendMessageToPatients = () => {
